@@ -6,9 +6,9 @@ signal lianli_ended(victory: bool)  # 历练结束（胜利或失败）
 signal lianli_waiting(time_remaining: float)  # 连续历练的等待间隔
 
 # 战斗相关信号（一次战斗是单次对决直到一方死亡）
-signal battle_started(enemy_name: String, is_elite: bool, enemy_max_health: int, enemy_level: int, player_max_health: int)  # 开始一场战斗
-signal battle_action_executed(is_player: bool, damage: int, is_spell: bool, spell_name: String)  # 战斗行动执行
-signal battle_updated(player_atb: float, enemy_atb: float, player_health: int, enemy_health: int, player_max_health: int, enemy_max_health: int)  # 战斗状态更新
+signal battle_started(enemy_name: String, is_elite: bool, enemy_max_health: float, enemy_level: int, player_max_health: float)  # 开始一场战斗
+signal battle_action_executed(is_player: bool, damage: float, is_spell: bool, spell_name: String)  # 战斗行动执行
+signal battle_updated(player_atb: float, enemy_atb: float, player_health: float, enemy_health: float, player_max_health: float, enemy_max_health: float)  # 战斗状态更新
 signal battle_ended(victory: bool, loot: Array, enemy_name: String)  # 战斗结束（胜利或失败）
 
 # 其他信号
@@ -20,6 +20,16 @@ const ATB_MAX: float = 100.0
 const TICK_INTERVAL: float = 0.1  # 每个tick的间隔时间（秒）
 const DEFAULT_ENEMY_ATTACK: float = 50.0
 const PERCENTAGE_BASE: float = 100.0
+
+## 格式化百分比，保留一位小数并去除尾0
+func _format_percent(value: float) -> String:
+	var percent = value * PERCENTAGE_BASE
+	# 保留一位小数
+	var formatted = "%.1f" % percent
+	# 去除尾0和小数点
+	if formatted.find(".") != -1:
+		formatted = formatted.rstrip("0").rstrip(".")
+	return formatted + "%"
 
 # 历练状态
 var is_in_lianli: bool = false  # 是否处于历练中（可能包含多场战斗）
@@ -40,9 +50,13 @@ var endless_tower_data: Node = null  # 无尽塔数据引用
 var continuous_lianli: bool = false
 var lianli_speed: float = 1.0
 var wait_timer: float = 0.0
-var wait_interval_min: float = 3.0
-var wait_interval_max: float = 5.0
 var current_wait_interval: float = 4.0
+
+# 等待时间管理（原WaitTimeManager功能合并）
+var base_wait_interval_min: float = 3.0
+var base_wait_interval_max: float = 5.0
+var wait_time_multiplier: float = 1.0
+var min_wait_time: float = 0.5
 
 # ATB战斗条
 var player_atb: float = 0.0
@@ -66,9 +80,6 @@ var combat_buffs: Dictionary = {
 
 # 缓存的术法系统引用
 var _cached_spell_system: Node = null
-
-func _ready():
-	pass
 
 func set_player(player_node: Node):
 	player = player_node
@@ -227,13 +238,20 @@ func start_battle(enemy_data_dict: Dictionary) -> bool:
 	# 重置战斗buff
 	_reset_combat_buffs()
 	
-	# 战斗开始时触发装备术法效果
+	# 获取玩家基础战斗气血（不包含开场技能加成）
+	var player_base_max_health = player.get_combat_max_health() if player else 0
+	
+	# 先发射战斗开始信号（GameUI显示"遭遇敌人"）
+	battle_started.emit(current_enemy.get("name", "敌人"), current_enemy.get("is_elite", false), current_enemy.get("health", 1000), current_enemy.get("level", 1), player_base_max_health)
+	
+	# 再触发装备术法效果（显示"战斗开始：xxx生效"并应用加成）
 	_trigger_start_spells()
 	
-	# 获取玩家战斗中的最大气血（包含Buff加成）
-	var player_combat_max_health = player.get_combat_max_health() if player else 0
+	# 如果有气血加成类技能，更新UI显示
+	if player and combat_buffs.health_bonus > 0:
+		var player_combat_max_health = player.get_combat_max_health()
+		battle_updated.emit(player_atb, enemy_atb, player.health, current_enemy.get("current_health", 0), player_combat_max_health, current_enemy.get("health", 0))
 	
-	battle_started.emit(current_enemy.get("name", "敌人"), current_enemy.get("is_elite", false), current_enemy.get("health", 1000), current_enemy.get("level", 1), player_combat_max_health)
 	return true
 
 # 结束历练（完全退出）
@@ -286,7 +304,7 @@ func _trigger_start_spells():
 					"defense":
 						var buff_percent = effect_data.get("buff_percent", 0.0)
 						combat_buffs.defense_percent += buff_percent
-						lianli_action_log.emit("战斗开始：" + spell_name + "生效，防御提升" + str(int(buff_percent * PERCENTAGE_BASE)) + "%")
+						lianli_action_log.emit("战斗开始：" + spell_name + "生效，防御提升" + _format_percent(buff_percent))
 					"speed":
 						var buff_value = effect_data.get("buff_value", 0.0)
 						combat_buffs.speed_bonus += buff_value
@@ -302,7 +320,7 @@ func _trigger_start_spells():
 							player.set_combat_buffs(combat_buffs)
 							# 增加当前气血（临时）
 							player.health += bonus_health
-						lianli_action_log.emit("战斗开始：" + spell_name + "生效，气血上限提升" + str(int(health_percent * PERCENTAGE_BASE)) + "%")
+						lianli_action_log.emit("战斗开始：" + spell_name + "生效，气血上限提升" + _format_percent(health_percent))
 		
 		# 增加使用次数
 		if not spell_id.is_empty():
@@ -411,9 +429,9 @@ func _execute_player_action():
 		var effect = attack_result.effect
 		var damage_percent = effect.get("damage_percent", PERCENTAGE_BASE)
 		
-		# 伤害公式：战斗攻击力 * 术法伤害百分比 - 敌方防御
-		var final_attack = player_attack * (damage_percent / PERCENTAGE_BASE)
-		damage_to_enemy = AttributeCalculator.calculate_damage(final_attack, enemy_defense)
+		# 伤害公式：战斗攻击力 * 术法伤害倍数 - 敌方防御
+		# damage_percent 已经是倍数形式（如 1.10 表示 110%）
+		damage_to_enemy = AttributeCalculator.calculate_damage(player_attack, enemy_defense, damage_percent)
 		
 		is_spell_damage = true
 		spell_name = attack_result.spell_name
@@ -422,6 +440,8 @@ func _execute_player_action():
 		damage_to_enemy = AttributeCalculator.calculate_damage(player_attack, enemy_defense)
 	
 	enemy_health -= damage_to_enemy
+	# 确保气血不低于0
+	enemy_health = max(0.0, enemy_health)
 	current_enemy["current_health"] = enemy_health
 	
 	# 战斗条归零并保留溢出
@@ -430,10 +450,11 @@ func _execute_player_action():
 	# 发送战斗日志
 	var enemy_name = current_enemy.get("name", "敌人")
 	var log_message = ""
+	var damage_str = AttributeCalculator.format_damage(damage_to_enemy)
 	if is_spell_damage:
-		log_message = "玩家使用" + spell_name + "对" + enemy_name + "造成了" + str(damage_to_enemy) + "点伤害"
+		log_message = "玩家使用" + spell_name + "对" + enemy_name + "造成了" + damage_str + "点伤害"
 	else:
-		log_message = "玩家使用普通攻击对" + enemy_name + "造成了" + str(damage_to_enemy) + "点伤害"
+		log_message = "玩家使用普通攻击对" + enemy_name + "造成了" + damage_str + "点伤害"
 	lianli_action_log.emit(log_message)
 	
 	# 发送行动执行信号
@@ -449,20 +470,21 @@ func _execute_enemy_action():
 	
 	# 使用AttributeCalculator计算战斗中的防御力
 	var player_defense = AttributeCalculator.calculate_combat_defense(player, combat_buffs)
-	var player_health = player.health
 	
 	# 使用AttributeCalculator计算伤害
 	var damage_to_player = AttributeCalculator.calculate_damage(enemy_attack, player_defense)
 	
-	player_health -= damage_to_player
-	player.health = player_health
+	# 使用Player的方法处理伤害
+	if player:
+		player.take_damage(damage_to_player)
 	
 	# 战斗条归零并保留溢出
 	enemy_atb -= ATB_MAX
 	
 	# 发送战斗日志
 	var enemy_name = current_enemy.get("name", "敌人")
-	lianli_action_log.emit(enemy_name + "对玩家造成了" + str(damage_to_player) + "点伤害")
+	var damage_str = AttributeCalculator.format_damage(damage_to_player)
+	lianli_action_log.emit(enemy_name + "对玩家造成了" + damage_str + "点伤害")
 	
 	# 发送行动执行信号
 	battle_action_executed.emit(false, damage_to_player, false, "")
@@ -471,7 +493,8 @@ func _execute_enemy_action():
 	var player_max_health = player.get_combat_max_health() if player else 0
 	var enemy_max_health = current_enemy.get("health", 0)
 	var enemy_current_health = current_enemy.get("current_health", 0)
-	battle_updated.emit(player_atb, enemy_atb, player_health, enemy_current_health, player_max_health, enemy_max_health)
+	var player_current_health = player.health if player else 0
+	battle_updated.emit(player_atb, enemy_atb, player_current_health, enemy_current_health, player_max_health, enemy_max_health)
 
 
 
@@ -481,7 +504,7 @@ func _restore_health_after_combat():
 		# 获取静态最终气血值（不包含战斗Buff）
 		var final_max_health = player.get_final_max_health()
 		# 当前气血不能超过静态最终气血值
-		player.health = min(player.health, final_max_health)
+		player.set_health(min(player.health, final_max_health))
 		# 清除玩家的战斗Buff
 		player.clear_combat_buffs()
 
@@ -534,11 +557,11 @@ func _handle_battle_victory():
 		end_lianli()
 		return
 	
-	# 启动等待计时器
+	# 启动等待计时器（连续历练模式）
 	if continuous_lianli and is_in_lianli:
 		is_waiting = true
 		wait_timer = 0.0
-		current_wait_interval = randf_range(wait_interval_min, wait_interval_max)
+		current_wait_interval = get_wait_interval()
 
 func _handle_battle_defeat():
 	is_in_battle = false
@@ -619,7 +642,7 @@ func start_wait_for_next_battle() -> bool:
 	# 进入等待状态
 	is_waiting = true
 	wait_timer = 0.0
-	current_wait_interval = wait_interval_min
+	current_wait_interval = get_wait_interval()
 	return true
 
 # 获取当前敌人的掉落配置
@@ -657,3 +680,24 @@ func get_spell_system() -> Node:
 		return _cached_spell_system
 	
 	return null
+
+## 获取等待时间管理器
+# ==================== 等待时间管理 ====================
+
+## 获取当前等待时间间隔（随机）
+func get_wait_interval() -> float:
+	var interval = randf_range(base_wait_interval_min, base_wait_interval_max)
+	return max(min_wait_time, interval * wait_time_multiplier)
+
+## 设置等待时间倍率
+func set_wait_time_multiplier(multiplier: float) -> void:
+	wait_time_multiplier = clamp(multiplier, 0.0, 1.0)
+
+## 获取等待时间倍率
+func get_wait_time_multiplier() -> float:
+	return wait_time_multiplier
+
+## 设置等待时间范围
+func set_wait_interval_range(min_time: float, max_time: float) -> void:
+	base_wait_interval_min = min_time
+	base_wait_interval_max = max_time

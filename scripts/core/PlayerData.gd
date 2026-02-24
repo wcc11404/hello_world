@@ -6,15 +6,17 @@ signal breakthrough_failed(message: String)
 var realm: String = "炼气期"
 var realm_level: int = 1
 
-# 基础属性值（不包含任何加成）
-var health: int = 500
-var max_health: int = 500
+# 基础属性值（不包含任何加成）- 全部使用 float
+var health: float = 500.0
 var spirit_energy: float = 0.0
-var max_spirit_energy: int = 100
 
-var attack: int = 50
-var defense: int = 25
-var speed: float = 5.5
+# 基础属性（随境界变化）
+var base_max_health: float = 500.0
+var base_max_spirit: float = 100.0
+var base_attack: float = 50.0
+var base_defense: float = 25.0
+var base_speed: float = 5.0
+var base_spirit_gain: float = 1.0
 
 var cultivation_active: bool = false
 
@@ -35,32 +37,38 @@ func _ready():
 func apply_realm_stats():
 	var realm_system = get_node_or_null("/root/GameManager").get_realm_system() if get_node_or_null("/root/GameManager") else null
 	
-	var old_max_health = max_health
+	var old_max_health = base_max_health
 	
 	if realm_system:
 		var level_info = realm_system.get_level_info(realm, realm_level)
-		max_health = level_info.get("health", 500)
-		attack = level_info.get("attack", 50)
-		defense = level_info.get("defense", 25)
-		max_spirit_energy = level_info.get("max_spirit_energy", 10)
+		base_max_health = float(level_info.get("health", 500))
+		base_attack = float(level_info.get("attack", 50))
+		base_defense = float(level_info.get("defense", 25))
+		base_max_spirit = float(level_info.get("max_spirit_energy", 10))
+		# 从境界配置获取速度
+		var realm_info = realm_system.get_realm_info(realm)
+		base_speed = float(realm_info.get("speed", 5.0))
+		base_spirit_gain = float(realm_info.get("spirit_gain_speed", 1.0))
 	else:
 		# 备用逻辑：使用默认属性
 		var realm_info = get_default_realm_info()
-		max_health = realm_info.get("health", 500)
-		attack = realm_info.get("attack", 50)
-		defense = realm_info.get("defense", 25)
-		max_spirit_energy = 10
+		base_max_health = float(realm_info.get("health", 500))
+		base_attack = float(realm_info.get("attack", 50))
+		base_defense = float(realm_info.get("defense", 25))
+		base_max_spirit = 10.0
+		base_speed = 5.0
+		base_spirit_gain = 1.0
 	
 	# 同步更新当前气血（保持满血状态或按比例调整）
 	if old_max_health > 0:
 		# 按比例调整当前气血
-		health = int(health * max_health / old_max_health)
+		health = health * base_max_health / old_max_health
 	else:
 		# 初始状态，设置为满血
-		health = max_health
+		health = get_final_max_health()
 	
-	# 确保当前气血不超过上限
-	health = min(health, max_health)
+	# 确保当前气血不超过最终上限（包含术法加成）
+	health = min(health, get_final_max_health())
 
 func get_default_realm_info() -> Dictionary:
 	return {"health": 500, "attack": 50, "defense": 25}
@@ -75,11 +83,21 @@ func get_display_dict() -> Dictionary:
 		"realm": realm,
 		"realm_level": realm_level,
 		"health": health,
-		"max_health": max_health,
 		"spirit_energy": spirit_energy,
-		"max_spirit_energy": max_spirit_energy,
-		"attack": attack,
-		"defense": defense,
+		# 基础属性
+		"base_max_health": base_max_health,
+		"base_max_spirit": base_max_spirit,
+		"base_attack": base_attack,
+		"base_defense": base_defense,
+		"base_speed": base_speed,
+		"base_spirit_gain": base_spirit_gain,
+		# 最终属性（供UI显示使用）
+		"final_max_health": get_final_max_health(),
+		"final_max_spirit": get_final_max_spirit_energy(),
+		"final_attack": get_final_attack(),
+		"final_defense": get_final_defense(),
+		"final_speed": get_final_speed(),
+		"final_spirit_gain": get_final_spirit_gain_speed(),
 		"spirit_stone": actual_spirit_stone
 	}
 
@@ -130,17 +148,53 @@ func get_final_spirit_gain_speed() -> float:
 # ==================== 战斗最终能力值计算 ====================
 # 战斗最终能力值 = 静态最终能力值 + 战斗临时Buff
 
-func get_combat_attack() -> int:
+func get_combat_attack() -> float:
 	return AttributeCalculator.calculate_combat_attack(self, combat_buffs)
 
-func get_combat_defense() -> int:
+func get_combat_defense() -> float:
 	return AttributeCalculator.calculate_combat_defense(self, combat_buffs)
 
 func get_combat_speed() -> float:
 	return AttributeCalculator.calculate_combat_speed(self, combat_buffs)
 
-func get_combat_max_health() -> int:
+func get_combat_max_health() -> float:
 	return AttributeCalculator.calculate_combat_max_health(self, combat_buffs)
+
+# ==================== 气血管理方法 ====================
+
+## 受到伤害
+func take_damage(damage: float) -> float:
+	health = max(0.0, health - damage)
+	return health
+
+## 恢复气血
+func heal(amount: float) -> float:
+	var max_health = get_final_max_health()
+	health = min(max_health, health + amount)
+	return health
+
+## 设置当前气血（用于战斗同步）
+func set_health(value: float) -> void:
+	health = max(0.0, value)
+
+# ==================== 灵气管理方法 ====================
+
+## 消耗灵气
+func consume_spirit(amount: float) -> bool:
+	if spirit_energy >= amount:
+		spirit_energy -= amount
+		return true
+	return false
+
+## 增加灵气
+func add_spirit(amount: float) -> float:
+	var max_spirit = get_final_max_spirit_energy()
+	spirit_energy = min(max_spirit, spirit_energy + amount)
+	return spirit_energy
+
+## 设置当前灵气
+func set_spirit(value: float) -> void:
+	spirit_energy = max(0.0, value)
 
 # ==================== 战斗Buff管理 ====================
 
@@ -173,10 +227,10 @@ func stop_cultivation():
 
 func add_spirit_energy(amount: float):
 	# 如果当前灵气已满，不增加
-	if spirit_energy >= max_spirit_energy:
+	if spirit_energy >= get_final_max_spirit_energy():
 		return
-	# 否则增加灵气，但不超过上限
-	spirit_energy = min(spirit_energy + amount, float(max_spirit_energy))
+	# 否则增加灵气，但不超过最终上限（包含术法加成）
+	spirit_energy = min(spirit_energy + amount, get_final_max_spirit_energy())
 
 # bug丹专用：增加灵气，可以超过上限
 func add_spirit_energy_unlimited(amount: float):
@@ -264,11 +318,12 @@ func attempt_breakthrough() -> Dictionary:
 func get_save_data() -> Dictionary:
 	# 只保存核心数据，可计算属性在加载时通过 apply_realm_stats() 重新计算
 	# 注意：spirit_stone 由 Inventory 系统单独管理
+	# 使用 format_for_save 格式化数值，保留4位小数
 	return {
 		"realm": realm,
 		"realm_level": realm_level,
-		"health": health,
-		"spirit_energy": spirit_energy,
+		"health": AttributeCalculator.format_for_save(health),
+		"spirit_energy": AttributeCalculator.format_for_save(spirit_energy),
 		"tower_highest_floor": tower_highest_floor,
 		"learned_recipes": learned_recipes,
 		"has_alchemy_furnace": has_alchemy_furnace
@@ -280,9 +335,9 @@ func apply_save_data(data: Dictionary):
 	if data.has("realm_level"):
 		realm_level = data["realm_level"]
 	if data.has("health"):
-		health = data["health"]
+		health = float(data["health"])
 	if data.has("spirit_energy"):
-		spirit_energy = data["spirit_energy"]
+		spirit_energy = float(data["spirit_energy"])
 	if data.has("tower_highest_floor"):
 		tower_highest_floor = data["tower_highest_floor"]
 	if data.has("learned_recipes"):

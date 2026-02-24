@@ -37,8 +37,11 @@
 
 ```gdscript
 # CultivationSystem.gd
-const BASE_HEAL_PER_SECOND: int = 1    # 基础气血恢复（每秒）
+const BASE_HEAL_PER_SECOND: float = 1.0  # 基础气血恢复（每秒，float类型）
 const cultivation_interval: float = 1.0  # 修炼间隔（秒）
+```
+
+> **数值规范**：修炼系统所有数值计算使用 `float` 类型，UI显示时调用 `AttributeCalculator` 格式化函数。详见 [属性数值系统规范](../ATTRIBUTE_SYSTEM.md)。
 
 # RealmSystem.gd - 突破材料配置
 const BREAKTHROUGH_MATERIALS = {
@@ -125,15 +128,20 @@ const MIN_OFFLINE_MINUTES: float = 1.0   # 最小离线时间（分钟）
 
 ### 3.3 属性字段命名
 
-| 字段名 | 含义 | 类型 |
-|--------|------|------|
-| `health` | 气血值 | int |
-| `attack` | 攻击力 | int |
-| `defense` | 防御力 | int |
-| `spirit_stone_cost` | 突破所需灵石 | int |
-| `spirit_energy_cost` | 突破所需灵气 | int |
-| `max_spirit_energy` | 最大灵气值 | int |
-| `spirit_gain_speed` | 灵气获取速度倍率 | float |
+| 字段名 | 含义 | 类型 | 说明 |
+|--------|------|------|------|
+| `health` | 气血值 | float | 当前气血，上限为 `final_max_health` |
+| `spirit_energy` | 灵气值 | float | 当前灵气，上限为 `final_max_spirit` |
+| `base_max_health` | 基础气血上限 | float | 随境界变化的基础值 |
+| `base_max_spirit` | 基础灵气上限 | float | 随境界变化的基础值 |
+| `base_attack` | 基础攻击 | float | 随境界变化的基础值 |
+| `base_defense` | 基础防御 | float | 随境界变化的基础值 |
+| `base_speed` | 基础速度 | float | 随境界变化的基础值 |
+| `base_spirit_gain` | 基础灵气获取 | float | 随境界变化的基础值 |
+| `spirit_stone_cost` | 突破所需灵石 | int | 突破消耗 |
+| `spirit_energy_cost` | 突破所需灵气 | int | 突破消耗 |
+
+> **注意**：所有基础属性都是 `float` 类型，最终属性通过 `AttributeCalculator` 计算获得。详见 [属性数值系统规范](../ATTRIBUTE_SYSTEM.md) 第1.1节。
 
 ---
 
@@ -214,21 +222,29 @@ const MIN_OFFLINE_MINUTES: float = 1.0   # 最小离线时间（分钟）
 ### 5.1 修炼系统
 
 #### 5.1.1 气血恢复机制
+
+**数据来源**：使用**静态最终属性**计算，详见 [属性数值系统规范](../ATTRIBUTE_SYSTEM.md) 第1.2节。
+
 ```gdscript
 func do_cultivate():
-    # 使用AttributeCalculator获取最终最大气血值
+    # 使用AttributeCalculator获取最终最大气血值（float）
     var final_max_health = AttributeCalculator.calculate_final_max_health(player)
     
-    # 基础恢复 + 吐纳术法加成
+    # 基础恢复 + 吐纳术法加成（全程float计算）
     var total_heal = BASE_HEAL_PER_SECOND
     var breathing_effect = spell_system.get_equipped_breathing_heal_effect()
     if breathing_effect.heal_amount > 0:
-        total_heal += int(final_max_health * breathing_effect.heal_amount)
+        # heal_amount 是百分比（如0.002 = 0.2%），直接相乘
+        total_heal += final_max_health * breathing_effect.heal_amount
     
-    # 应用气血恢复
+    # 应用气血恢复（float计算，不截断）
     if player.health < final_max_health:
         player.health = min(final_max_health, player.health + total_heal)
 ```
+
+**显示规则**：
+- 气血值显示：`AttributeCalculator.format_integer()`（保留整数）
+- 气血上限显示：`AttributeCalculator.format_integer()`（保留整数）
 
 #### 5.1.2 灵气获取机制
 ```gdscript

@@ -47,7 +47,7 @@ func calculate_offline_reward(player_data: Node, last_save_time: float) -> Dicti
 	var total_stone = int(stone_per_minute * total_minutes)
 	
 	# 灵气上限：最大灵气值 × 60
-	var max_spirit = player_data.max_spirit_energy * 60
+	var max_spirit = player_data.get_final_max_spirit_energy() * 60
 	total_spirit = min(total_spirit, max_spirit)
 	
 	var rewards = {

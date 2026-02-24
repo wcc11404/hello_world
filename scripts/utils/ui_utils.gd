@@ -89,20 +89,24 @@ static func format_decimal(value: float, max_decimal_places: int = 2) -> String:
 # ==================== 术法描述占位符替换 ====================
 
 # 替换术法描述中的占位符
+# 使用 AttributeCalculator 的格式化函数
 static func format_spell_description(description: String, effect: Dictionary) -> String:
 	var result = description
 	
-	# 替换概率/百分比占位符（转换为整数百分比）
 	for key in effect.keys():
-		if key.ends_with("_chance") or key.ends_with("_percent"):
-			var placeholder = "{" + key + "}"
-			if result.find(placeholder) != -1:
-				var percent_value = int(effect[key] * 100)
-				result = result.replace(placeholder, str(percent_value) + "%")
-		elif key.ends_with("_value") or key.ends_with("_amount"):
-			var placeholder = "{" + key + "}"
-			if result.find(placeholder) != -1:
-				result = result.replace(placeholder, trim_trailing_zeros(effect[key]))
+		var placeholder = "{" + key + "}"
+		if result.find(placeholder) == -1:
+			continue
+		
+		# 百分比类型（damage_percent, buff_percent, heal_percent, trigger_chance 等）
+		if key.ends_with("_percent") or key.ends_with("_chance"):
+			result = result.replace(placeholder, AttributeCalculator.format_percent(effect[key]))
+		# 固定数值类型
+		elif key.ends_with("_value") or key.ends_with("_amount") or key.ends_with("_bonus"):
+			result = result.replace(placeholder, AttributeCalculator.format_default(effect[key]))
+		# 其他数值类型，默认使用 format_default
+		else:
+			result = result.replace(placeholder, AttributeCalculator.format_default(effect[key]))
 	
 	return result
 

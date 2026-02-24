@@ -95,9 +95,11 @@ const MAX_PASSIVE_SPELLS = 2   # 被动术法最大装备数
 ```
 
 **格式化规则**：
-- `{xxx_chance}` → `int(value*100)%` → "30%"
-- `{xxx_percent}` → `int(value*100)%` → "15%" 或 "110%"
-- `{xxx_value}` → 去除末尾0 → "1" 或 "1.5"
+- `{xxx_chance}` → `AttributeCalculator.format_percent()` → "30%"
+- `{xxx_percent}` → `AttributeCalculator.format_percent()` → "15%" 或 "110%"
+- `{xxx_value}` → `AttributeCalculator.format_default()` → "1" 或 "1.5"
+
+> **注意**：术法系统的数值显示统一使用 `AttributeCalculator` 的格式化函数。详见 [属性数值系统规范](../ATTRIBUTE_SYSTEM.md) 第2.4节。
 
 ---
 
@@ -320,6 +322,13 @@ if spell_info.charged_spirit < spirit_cost:
 ```
 
 #### 6.4.2 属性加成计算
+
+术法属性加成作用于**静态最终属性**计算，详见 [属性数值系统规范](../ATTRIBUTE_SYSTEM.md) 第1.2节。
+
+**加成类型**：
+- **攻击/防御/气血/灵气获取**：乘法加成（如 1.02 表示 +2%）
+- **速度**：加法加成（如 0.1 表示 +0.1）
+
 ```gdscript
 # 获取所有已获取术法的属性加成
 func get_attribute_bonuses() -> Dictionary:
@@ -342,6 +351,15 @@ func get_attribute_bonuses() -> Dictionary:
                     bonuses[attr] *= attribute_bonus[attr]  # 乘法
     
     return bonuses
+```
+
+**静态最终属性计算**（AttributeCalculator）：
+```gdscript
+# 示例：最终攻击 = 基础攻击 × 术法攻击加成
+static func calculate_final_attack(player: Node) -> float:
+    var base_attack = player.base_attack
+    var spell_bonuses = _get_spell_bonuses(player)
+    return base_attack * spell_bonuses.get("attack", 1.0)
 ```
 
 ---

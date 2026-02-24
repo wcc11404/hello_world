@@ -46,6 +46,8 @@ const DEFAULT_ENEMY_ATTACK: float = 50.0  # 默认敌人攻击
 const PERCENTAGE_BASE: float = 100.0      # 百分比基数
 ```
 
+> **数值规范**：历练系统所有数值计算使用 `float` 类型，UI显示时调用 `AttributeCalculator` 格式化函数。详见 [属性数值系统规范](../ATTRIBUTE_SYSTEM.md)。
+
 ### 2.3 主要数据结构
 
 #### 2.3.1 历练状态
@@ -72,6 +74,9 @@ var tick_accumulator: float = 0.0        # 时间累积器
 ```
 
 #### 2.3.3 战斗中的临时buff系统
+
+**数据来源**：战斗Buff作用于**动态最终属性**计算，详见 [属性数值系统规范](../ATTRIBUTE_SYSTEM.md) 第1.3节。
+
 ```gdscript
 var combat_buffs: Dictionary = {
     "attack_percent": 0.0,   # 攻击加成百分比（小数，如0.25 = 25%）
@@ -285,16 +290,24 @@ if player_ready and enemy_ready:
 ## 6. 伤害机制
 
 ### 6.1 基础伤害计算
+
+**数据来源**：使用**动态最终属性**计算，详见 [属性数值系统规范](../ATTRIBUTE_SYSTEM.md) 第1.4节。
+
 ```gdscript
-func calculate_damage(attack: float, defense: float) -> int
+func calculate_damage(attack: float, defense: float) -> float
 ```
 **公式**：
 ```
-damage = max(1, int(attack - defense))
+damage = max(1.0, attack - defense)
 ```
 **说明**：
-- 伤害至少为1（保底伤害机制）
+- 伤害至少为1.0（保底伤害机制）
 - 纯减法公式，防御直接抵消攻击
+- 返回 `float` 类型，UI显示时使用 `format_damage()` 格式化
+
+**显示规则**：
+- 伤害值 ≤ 1000：`format_one_decimal()`（保留一位小数）
+- 伤害值 > 1000：`format_integer()`（保留整数）
 
 ### 6.2 术法伤害计算
 ```gdscript
@@ -342,25 +355,32 @@ var combat_buffs: Dictionary = {
 ```
 
 ### 7.2 Buff生效机制
+
+**数据来源**：战斗Buff作用于**动态最终属性**计算，详见 [属性数值系统规范](../ATTRIBUTE_SYSTEM.md) 第1.3节。
+
 **开局触发**：
 - 被动术法（PASSIVE类型）在战斗开始时自动触发
 - 通过 `_trigger_start_spells()` 函数执行
 
-**Buff应用**：
+**Buff应用**（全程float计算）：
 ```gdscript
-# 攻击buff
-player_attack = base_attack * (1.0 + combat_buffs.attack_percent)
+# 攻击buff（百分比乘法）
+combat_attack = final_attack * (1.0 + combat_buffs.attack_percent)
 
-# 防御buff
-player_defense = base_defense * (1.0 + combat_buffs.defense_percent)
+# 防御buff（百分比乘法）
+combat_defense = final_defense * (1.0 + combat_buffs.defense_percent)
 
-# 速度buff
-player_speed = base_speed + combat_buffs.speed_bonus
+# 速度buff（固定值加法）
+combat_speed = final_speed + combat_buffs.speed_bonus
 
-# 气血buff（同时影响当前和上限）
-player_max_health = base_max_health + int(combat_buffs.health_bonus)
-player_health = base_current_health + int(combat_buffs.health_bonus)
+# 气血buff（固定值加法）
+combat_max_health = final_max_health + combat_buffs.health_bonus
 ```
+
+**说明**：
+- `final_xxx` 是静态最终属性（来自 AttributeCalculator）
+- `combat_xxx` 是动态最终属性（用于战斗计算）
+- 所有计算使用 `float` 类型，不截断
 
 ### 7.3 气血Buff特殊机制
 
@@ -621,6 +641,9 @@ lianli_reward.emit(item_id, amount, "tower")    # 无尽塔奖励
 ### 10.4 与UI系统的联动
 
 #### 10.4.1 信号定义
+
+> **数值类型**：所有血量、伤害数值均使用 `float` 类型，详见 [属性数值系统规范](../ATTRIBUTE_SYSTEM.md) 第4.2节。
+
 ```gdscript
 # 历练相关信号
 signal lianli_started(area_id: String)                                    # 历练开始（进入区域）
@@ -628,15 +651,19 @@ signal lianli_ended(victory: bool)                                        # 历�
 signal lianli_waiting(time_remaining: float)                              # 连续历练等待
 
 # 战斗相关信号
-signal battle_started(enemy_name: String, is_elite: bool, enemy_max_health: int, enemy_level: int)  # 战斗开始
-signal battle_action_executed(is_player: bool, damage: int, is_spell: bool, spell_name: String)  # 行动执行
-signal battle_updated(player_atb: float, enemy_atb: float, player_health: int, enemy_health: int, player_max_health: int, enemy_max_health: int)  # 状态更新
+signal battle_started(enemy_name: String, is_elite: bool, enemy_max_health: float, enemy_level: int, player_max_health: float)  # 战斗开始
+signal battle_action_executed(is_player: bool, damage: float, is_spell: bool, spell_name: String)  # 行动执行
+signal battle_updated(player_atb: float, enemy_atb: float, player_health: float, enemy_health: float, player_max_health: float, enemy_max_health: float)  # 状态更新
 signal battle_ended(victory: bool, loot: Array, enemy_name: String)       # 战斗结束
 
 # 其他信号
 signal lianli_reward(item_id: String, amount: int, source: String)
 signal lianli_action_log(message: String)
 ```
+
+**UI显示规则**：
+- 血条显示：`format_integer()`（保留整数）
+- 伤害显示：`format_damage()`（≤1000保留一位小数，>1000保留整数）
 
 #### 10.4.2 信号触发时机
 - `lianli_started`: 进入历练区域时

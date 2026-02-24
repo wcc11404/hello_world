@@ -8,1002 +8,1002 @@
 		"capacity": 50,
 		"slots": [
 			{
-				"count": 5.0,
+				"count": 1,
 				"empty": false,
-				"id": "body_integration_pill"
+				"id": "starter_pack"
 			},
 			{
-				"count": 2.0,
+				"count": 0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 9999863,
+				"empty": false,
+				"id": "spirit_stone"
+			},
+			{
+				"count": 9999999,
+				"empty": false,
+				"id": "spirit_stone"
+			},
+			{
+				"count": 9999999,
+				"empty": false,
+				"id": "spirit_stone"
+			},
+			{
+				"count": 9999999,
+				"empty": false,
+				"id": "spirit_stone"
+			},
+			{
+				"count": 9999999,
+				"empty": false,
+				"id": "spirit_stone"
+			},
+			{
+				"count": 9999999,
+				"empty": false,
+				"id": "spirit_stone"
+			},
+			{
+				"count": 9999999,
+				"empty": false,
+				"id": "spirit_stone"
+			},
+			{
+				"count": 9999999,
+				"empty": false,
+				"id": "spirit_stone"
+			},
+			{
+				"count": 9999999,
+				"empty": false,
+				"id": "spirit_stone"
+			},
+			{
+				"count": 9999999,
+				"empty": false,
+				"id": "spirit_stone"
+			},
+			{
+				"count": 10,
+				"empty": false,
+				"id": "spirit_stone"
+			},
+			{
+				"count": 4,
 				"empty": false,
 				"id": "bug_pill"
 			},
 			{
-				"count": 5.0,
-				"empty": false,
-				"id": "foundation_pill"
-			},
-			{
-				"count": 5.0,
-				"empty": false,
-				"id": "golden_core_pill"
-			},
-			{
-				"count": 10.0,
+				"count": 5,
 				"empty": false,
 				"id": "health_pill"
 			},
 			{
-				"count": 5.0,
-				"empty": false,
-				"id": "mahayana_pill"
-			},
-			{
-				"count": 5.0,
-				"empty": false,
-				"id": "nascent_soul_pill"
-			},
-			{
-				"count": 1.0,
-				"empty": false,
-				"id": "spell_basic_boxing_techniques"
-			},
-			{
-				"count": 0.0,
-				"empty": true,
-				"id": ""
-			},
-			{
-				"count": 0.0,
-				"empty": true,
-				"id": ""
-			},
-			{
-				"count": 0.0,
-				"empty": true,
-				"id": ""
-			},
-			{
-				"count": 0.0,
-				"empty": true,
-				"id": ""
-			},
-			{
-				"count": 0.0,
-				"empty": true,
-				"id": ""
-			},
-			{
-				"count": 5.0,
+				"count": 5,
 				"empty": false,
 				"id": "spirit_pill"
 			},
 			{
-				"count": 5.0,
+				"count": 9,
+				"empty": false,
+				"id": "foundation_pill"
+			},
+			{
+				"count": 10,
+				"empty": false,
+				"id": "golden_core_pill"
+			},
+			{
+				"count": 10,
+				"empty": false,
+				"id": "nascent_soul_pill"
+			},
+			{
+				"count": 10,
 				"empty": false,
 				"id": "spirit_separation_pill"
 			},
 			{
-				"count": 4297191.0,
-				"empty": false,
-				"id": "spirit_stone"
-			},
-			{
-				"count": 9999999.0,
-				"empty": false,
-				"id": "spirit_stone"
-			},
-			{
-				"count": 9999999.0,
-				"empty": false,
-				"id": "spirit_stone"
-			},
-			{
-				"count": 9999999.0,
-				"empty": false,
-				"id": "spirit_stone"
-			},
-			{
-				"count": 9999999.0,
-				"empty": false,
-				"id": "spirit_stone"
-			},
-			{
-				"count": 9999999.0,
-				"empty": false,
-				"id": "spirit_stone"
-			},
-			{
-				"count": 7.0,
-				"empty": false,
-				"id": "tribulation_pill"
-			},
-			{
-				"count": 5.0,
+				"count": 10,
 				"empty": false,
 				"id": "void_refining_pill"
 			},
 			{
-				"count": 0.0,
-				"empty": true,
-				"id": ""
+				"count": 10,
+				"empty": false,
+				"id": "body_integration_pill"
+			},
+			{
+				"count": 10,
+				"empty": false,
+				"id": "mahayana_pill"
+			},
+			{
+				"count": 10,
+				"empty": false,
+				"id": "tribulation_pill"
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			},
 			{
-				"count": 0.0,
+				"count": 0,
 				"empty": true,
 				"id": ""
 			}
@@ -1011,11 +1011,11 @@
 	},
 	"player": {
 		"has_alchemy_furnace": false,
-		"health": 34600800,
+		"health": "250",
 		"learned_recipes": [],
-		"realm": "渡劫期",
-		"realm_level": 7,
-		"spirit_energy": 208718798.146399,
+		"realm": "筑基期",
+		"realm_level": 1,
+		"spirit_energy": "99999680",
 		"tower_highest_floor": 0
 	},
 	"spell_system": {
@@ -1038,25 +1038,25 @@
 				"charged_spirit": 0,
 				"level": 1,
 				"obtained": true,
-				"use_count": 1
+				"use_count": 0
 			},
 			"basic_breathing": {
 				"charged_spirit": 0,
 				"level": 1,
 				"obtained": true,
-				"use_count": 9
+				"use_count": 0
 			},
 			"basic_defense": {
 				"charged_spirit": 0,
 				"level": 1,
 				"obtained": true,
-				"use_count": 8
+				"use_count": 0
 			},
 			"basic_health": {
 				"charged_spirit": 0,
 				"level": 1,
 				"obtained": true,
-				"use_count": 8
+				"use_count": 0
 			},
 			"basic_steps": {
 				"charged_spirit": 0,
@@ -1068,10 +1068,10 @@
 				"charged_spirit": 0,
 				"level": 1,
 				"obtained": true,
-				"use_count": 1
+				"use_count": 0
 			}
 		}
 	},
-	"timestamp": 1771860493.49546,
+	"timestamp": 1771935446.28964,
 	"version": "1.3"
 }

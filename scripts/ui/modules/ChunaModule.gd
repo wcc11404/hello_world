@@ -466,8 +466,7 @@ func _on_use_button_pressed():
 					return
 			"add_health":
 				if player:
-					var max_health = player.get_final_max_health()
-					player.health = min(player.health + effect_amount, max_health)
+					player.heal(effect_amount)
 					_add_log("使用" + item_name + "，气血值恢复" + str(effect_amount) + "点！")
 				else:
 					_add_log("玩家未初始化，无法使用")
@@ -476,9 +475,12 @@ func _on_use_button_pressed():
 				if player:
 					var spirit_amount = effect.get("spirit_amount", 0)
 					var health_amount = effect.get("health_amount", 0)
-					var max_health = player.get_final_max_health()
-					player.add_spirit_energy_unlimited(spirit_amount)
-					player.health = min(player.health + health_amount, max_health)
+					var unlimited = effect.get("unlimited", false)
+					if unlimited:
+						player.add_spirit_energy_unlimited(spirit_amount)
+					else:
+						player.add_spirit(spirit_amount)
+					player.heal(health_amount)
 					_add_log("使用" + item_name + "，灵气增加" + str(spirit_amount) + "点，气血值恢复" + str(health_amount) + "点！")
 				else:
 					_add_log("玩家未初始化，无法使用")

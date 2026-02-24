@@ -10,7 +10,7 @@ var cultivation_interval: float = 1.0
 var player: Node = null
 
 # 基础气血值回复（每秒）
-const BASE_HEAL_PER_SECOND: int = 1
+const BASE_HEAL_PER_SECOND: float = 1.0
 
 func _ready():
 	pass
@@ -45,7 +45,7 @@ func do_cultivate():
 	# 使用AttributeCalculator获取最终最大气血值（包含术法加成）
 	var final_max_health = AttributeCalculator.calculate_final_max_health(player)
 	
-	# 计算气血值回复
+	# 计算气血值回复（使用float计算）
 	var total_heal = BASE_HEAL_PER_SECOND
 	
 	# 检查是否有装备的吐纳术法
@@ -54,19 +54,19 @@ func do_cultivate():
 	if spell_system:
 		var breathing_effect = spell_system.get_equipped_breathing_heal_effect()
 		if breathing_effect.heal_amount > 0:
-			# 加上吐纳术法的百分比回复
-			total_heal += int(final_max_health * breathing_effect.heal_amount)
+			# 加上吐纳术法的百分比回复（保留float，不截断）
+			total_heal += final_max_health * breathing_effect.heal_amount
 			breathing_spell_id = breathing_effect.get("spell_id", "")
 		
 		# 给吐纳心法使用次数+1（无论灵气是否已满）
 		if not breathing_spell_id.is_empty():
 			spell_system.add_spell_use_count(breathing_spell_id)
 	
-	# 应用气血值回复（使用最终最大气血值判断和限制）
+	# 应用气血值回复（使用Player的heal方法）
 	if player.health < final_max_health:
-		player.health = min(final_max_health, player.health + total_heal)
+		player.heal(total_heal)
 	
-	if player.spirit_energy >= player.max_spirit_energy:
+	if player.spirit_energy >= player.get_final_max_spirit_energy():
 		cultivation_complete.emit()
 		return
 	
@@ -79,7 +79,7 @@ func do_cultivate():
 	
 	player.add_spirit_energy(spirit_gain)
 	
-	cultivation_progress.emit(player.spirit_energy, player.max_spirit_energy)
+	cultivation_progress.emit(player.spirit_energy, player.get_final_max_spirit_energy())
 
 func _get_spell_system() -> Node:
 	var game_manager = get_node_or_null("/root/GameManager")
