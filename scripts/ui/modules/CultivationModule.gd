@@ -22,6 +22,25 @@ var cultivation_panel: Control = null
 var cultivate_button: Button = null
 var breakthrough_button: Button = null
 
+# 气血/灵气条
+var health_bar: ProgressBar = null
+var health_value: Label = null
+var spirit_bar: ProgressBar = null
+var spirit_value: Label = null
+
+# 属性标签
+var attack_label: Label = null
+var defense_label: Label = null
+var speed_label: Label = null
+var spirit_gain_label: Label = null
+
+# 修炼状态标签
+var status_label: Label = null
+
+# 修炼小人素材
+var cultivation_figure: TextureRect = null
+var cultivation_figure_particles: TextureRect = null
+
 # 状态
 var _is_initialized: bool = false
 
@@ -163,6 +182,72 @@ func _build_breakthrough_message(stone_cost: int, energy_cost: int, materials: D
 	
 	msg += "，" + suffix
 	return msg
+
+# ==================== UI更新功能 ====================
+
+## 更新修炼面板显示（气血、灵气、属性、状态）
+func update_display(status: Dictionary = {}):
+	if not player:
+		return
+	
+	# 如果没有传入status，从player获取
+	if status.is_empty():
+		status = player.get_status_dict()
+	
+	# 更新气血条
+	if health_bar:
+		var final_max_health = player.get_final_max_health()
+		health_bar.max_value = final_max_health
+		health_bar.value = status.health
+	if health_value:
+		var final_max_health = player.get_final_max_health()
+		health_value.text = AttributeCalculator.format_health_spirit(status.health) + "/" + AttributeCalculator.format_health_spirit(final_max_health)
+	
+	# 更新灵气条
+	if spirit_bar:
+		spirit_bar.max_value = player.get_final_max_spirit_energy()
+		spirit_bar.value = status.spirit_energy
+	if spirit_value:
+		spirit_value.text = AttributeCalculator.format_health_spirit(status.spirit_energy) + "/" + AttributeCalculator.format_health_spirit(player.get_final_max_spirit_energy())
+	
+	# 更新属性显示
+	if attack_label:
+		attack_label.text = "攻击: " + AttributeCalculator.format_attack_defense(player.get_final_attack())
+	if defense_label:
+		defense_label.text = "防御: " + AttributeCalculator.format_attack_defense(player.get_final_defense())
+	if speed_label:
+		speed_label.text = "速度: " + AttributeCalculator.format_speed(player.get_final_speed())
+	if spirit_gain_label:
+		spirit_gain_label.text = "灵气获取: " + AttributeCalculator.format_spirit_gain_speed(player.get_final_spirit_gain_speed()) + "/秒"
+	
+	# 更新修炼状态
+	if status.is_cultivating:
+		if status_label:
+			status_label.text = "修炼中..."
+			status_label.modulate = Color.GREEN
+		# 修炼时：隐藏基础小人，显示特效小人
+		if cultivation_figure:
+			cultivation_figure.visible = false
+		if cultivation_figure_particles:
+			cultivation_figure_particles.visible = true
+	else:
+		if status_label:
+			status_label.text = "未修炼"
+			status_label.modulate = Color.GRAY
+		# 停止修炼时：显示基础小人，隐藏特效小人
+		if cultivation_figure:
+			cultivation_figure.visible = true
+		if cultivation_figure_particles:
+			cultivation_figure_particles.visible = false
+	
+	# 更新突破按钮文本
+	var breakthrough_info = status.get("can_breakthrough", {})
+	if breakthrough_button:
+		breakthrough_button.disabled = false
+		if breakthrough_info.get("type") == "realm":
+			breakthrough_button.text = "破境"
+		else:
+			breakthrough_button.text = "突破"
 
 # 清理
 func cleanup():

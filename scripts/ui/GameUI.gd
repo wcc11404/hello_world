@@ -408,6 +408,23 @@ func setup_neishi_module():
 	cultivation_module.cultivate_button = cultivate_button
 	cultivation_module.breakthrough_button = breakthrough_button
 	
+	# 设置气血/灵气条
+	cultivation_module.health_bar = health_bar
+	cultivation_module.health_value = health_value
+	cultivation_module.spirit_bar = spirit_bar
+	cultivation_module.spirit_value = spirit_value
+	
+	# 设置属性标签
+	cultivation_module.attack_label = attack_label
+	cultivation_module.defense_label = defense_label
+	cultivation_module.speed_label = speed_label
+	cultivation_module.spirit_gain_label = spirit_gain_label
+	
+	# 设置修炼状态标签和小人素材
+	cultivation_module.status_label = status_label
+	cultivation_module.cultivation_figure = cultivation_figure
+	cultivation_module.cultivation_figure_particles = cultivation_figure_particles
+	
 	# 初始化模块
 	var game_manager = get_node("/root/GameManager")
 	var cult_system = game_manager.get_cultivation_system() if game_manager else null
@@ -874,65 +891,9 @@ func update_ui():
 		stone_count = inventory.get_item_count("spirit_stone")
 	spirit_stone_label.text = "灵石: " + UIUtils.format_number(stone_count)
 	
-	# 使用最终属性更新显示
-	if player:
-		var final_max_health = player.get_final_max_health()
-		health_bar.max_value = final_max_health
-		health_bar.value = status.health
-		health_value.text = AttributeCalculator.format_health_spirit(status.health) + "/" + AttributeCalculator.format_health_spirit(final_max_health)
-	else:
-		health_bar.max_value = status.final_max_health
-		health_bar.value = status.health
-		health_value.text = AttributeCalculator.format_health_spirit(status.health) + "/" + AttributeCalculator.format_health_spirit(status.final_max_health)
-
-	# 更新灵气条
-	if spirit_bar:
-		if player:
-			spirit_bar.max_value = player.get_final_max_spirit_energy()
-		else:
-			spirit_bar.max_value = status.final_max_spirit
-		spirit_bar.value = status.spirit_energy
-	if spirit_value:
-		if player:
-			spirit_value.text = AttributeCalculator.format_health_spirit(status.spirit_energy) + "/" + AttributeCalculator.format_health_spirit(player.get_final_max_spirit_energy())
-		else:
-			spirit_value.text = AttributeCalculator.format_health_spirit(status.spirit_energy) + "/" + AttributeCalculator.format_health_spirit(status.final_max_spirit)
-	
-	# 更新属性显示
-	if player:
-		if attack_label:
-			attack_label.text = "攻击: " + AttributeCalculator.format_attack_defense(player.get_final_attack())
-		if defense_label:
-			defense_label.text = "防御: " + AttributeCalculator.format_attack_defense(player.get_final_defense())
-		if speed_label:
-			speed_label.text = "速度: " + AttributeCalculator.format_speed(player.get_final_speed())
-		if spirit_gain_label:
-			spirit_gain_label.text = "灵气获取: " + AttributeCalculator.format_spirit_gain_speed(player.get_final_spirit_gain_speed()) + "/秒"
-	
-	if status.is_cultivating:
-		status_label.text = "修炼中..."
-		status_label.modulate = Color.GREEN
-		# 修炼时：隐藏基础小人，显示特效小人
-		if cultivation_figure:
-			cultivation_figure.visible = false
-		if cultivation_figure_particles:
-			cultivation_figure_particles.visible = true
-	else:
-		status_label.text = "未修炼"
-		status_label.modulate = Color.GRAY
-		# 停止修炼时：显示基础小人，隐藏特效小人
-		if cultivation_figure:
-			cultivation_figure.visible = true
-		if cultivation_figure_particles:
-			cultivation_figure_particles.visible = false
-	
-	# 突破按钮一直可用，根据状态显示不同文本
-	var breakthrough_info = status.get("can_breakthrough", {})
-	breakthrough_button.disabled = false
-	if breakthrough_info.get("type") == "realm":
-		breakthrough_button.text = "破境"
-	else:
-		breakthrough_button.text = "突破"
+	# 更新修炼面板显示（通过CultivationModule）
+	if cultivation_module:
+		cultivation_module.update_display(status)
 
 func update_realm_background(realm_name: String):
 	if not top_bar_background:
