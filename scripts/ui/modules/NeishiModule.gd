@@ -120,14 +120,14 @@ func _get_panel_name(panel: Control) -> String:
 		return "spell"
 	return ""
 
-# 更新Tab按钮视觉状态
+# 更新Tab按钮视觉状态（使用disabled属性标识选中状态，与主TabBar一致）
 func _update_tab_buttons(active_panel: Control):
 	if cultivation_tab:
-		cultivation_tab.modulate = Color(0.5, 0.5, 0.5) if active_panel == cultivation_panel else Color(1, 1, 1)
+		cultivation_tab.disabled = (active_panel == cultivation_panel)
 	if meridian_tab:
-		meridian_tab.modulate = Color(0.5, 0.5, 0.5) if active_panel == meridian_panel else Color(1, 1, 1)
+		meridian_tab.disabled = (active_panel == meridian_panel)
 	if spell_tab:
-		spell_tab.modulate = Color(0.5, 0.5, 0.5) if active_panel == spell_panel else Color(1, 1, 1)
+		spell_tab.disabled = (active_panel == spell_panel)
 
 # Tab按钮按下处理
 func on_cultivation_tab_pressed():

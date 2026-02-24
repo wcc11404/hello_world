@@ -206,6 +206,9 @@ func _ready():
 	# 再连接按钮信号（模块已创建）
 	setup_button_connections()
 	
+	# 显示默认内视页面（模块初始化完成后）
+	show_neishi_tab()
+	
 	# 在log_manager初始化后添加欢迎消息
 	add_log("欢迎来到修仙世界！")
 	add_log("点击下方按钮开始修炼")
@@ -218,8 +221,6 @@ func _setup_optional_nodes():
 
 	# 监听屏幕大小变化
 	get_viewport().size_changed.connect(_on_viewport_size_changed)
-
-	show_neishi_tab()
 
 func _on_viewport_size_changed():
 	update_font_sizes()
