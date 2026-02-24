@@ -66,7 +66,8 @@ var item_data: Dictionary = {
 		"effect": {
 			"type": "add_spirit_and_health",
 			"spirit_amount": 100000000,
-			"health_amount": 10000
+			"health_amount": 10000,
+			"unlimited": true
 		}
 	},
 	"health_pill": {

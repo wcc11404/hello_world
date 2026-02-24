@@ -102,7 +102,7 @@ func on_breakthrough_button_pressed():
 # 处理突破成功
 func _handle_breakthrough_success(result: Dictionary):
 	# 突破成功后恢复生命值到满
-	player.health = player.max_health
+	player.set_health(player.get_final_max_health())
 	
 	var stone_cost = result.get("stone_cost", 0)
 	var energy_cost = result.get("energy_cost", 0)

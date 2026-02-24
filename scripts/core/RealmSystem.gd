@@ -82,7 +82,8 @@ const REALMS = {
 		},
 		"next_realm": "筑基期",
 		"description": "引气入体，修炼入门",
-		"spirit_gain_speed": 1
+		"spirit_gain_speed": 1,
+		"speed": 5
 	},
 	"筑基期": {
 		"max_level": 10,
@@ -101,7 +102,8 @@ const REALMS = {
 		},
 		"next_realm": "金丹期",
 		"description": "凝聚道基，初步成仙",
-		"spirit_gain_speed": 1.2
+		"spirit_gain_speed": 1.2,
+		"speed": 5
 	},
 	"金丹期": {
 		"max_level": 10,
@@ -120,7 +122,8 @@ const REALMS = {
 		},
 		"next_realm": "元婴期",
 		"description": "凝结金丹，蜕凡成仙",
-		"spirit_gain_speed": 1.5
+		"spirit_gain_speed": 1.5,
+		"speed": 5
 	},
 	"元婴期": {
 		"max_level": 10,
@@ -139,7 +142,8 @@ const REALMS = {
 		},
 		"next_realm": "化神期",
 		"description": "元婴出窍，神通广大",
-		"spirit_gain_speed": 2
+		"spirit_gain_speed": 2,
+		"speed": 5
 	},
 	"化神期": {
 		"max_level": 10,
@@ -158,7 +162,8 @@ const REALMS = {
 		},
 		"next_realm": "炼虚期",
 		"description": "返璞归真，化神为虚",
-		"spirit_gain_speed": 3
+		"spirit_gain_speed": 3,
+		"speed": 5
 	},
 	"炼虚期": {
 		"max_level": 10,
@@ -177,7 +182,8 @@ const REALMS = {
 		},
 		"next_realm": "合体期",
 		"description": "虚实合一，神通无量",
-		"spirit_gain_speed": 5
+		"spirit_gain_speed": 5,
+		"speed": 5
 	},
 	"合体期": {
 		"max_level": 10,
@@ -196,7 +202,8 @@ const REALMS = {
 		},
 		"next_realm": "大乘期",
 		"description": "天地合一，接近仙人",
-		"spirit_gain_speed": 9
+		"spirit_gain_speed": 9,
+		"speed": 5
 	},
 	"大乘期": {
 		"max_level": 10,
@@ -215,7 +222,8 @@ const REALMS = {
 		},
 		"next_realm": "渡劫期",
 		"description": "功德圆满，渡劫飞升",
-		"spirit_gain_speed": 18
+		"spirit_gain_speed": 18,
+		"speed": 5
 	},
 	"渡劫期": {
 		"max_level": 10,
@@ -234,7 +242,8 @@ const REALMS = {
 		},
 		"next_realm": "",
 		"description": "历尽天劫，羽化登仙",
-		"spirit_gain_speed": 40
+		"spirit_gain_speed": 40,
+		"speed": 5
 	}
 }
 

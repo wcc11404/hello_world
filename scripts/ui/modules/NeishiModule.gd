@@ -43,8 +43,9 @@ func initialize(ui: Node, player_node: Node):
 # 设置子模块
 func set_cultivation_module(module: CultivationModule):
 	cultivation_module = module
-	if cultivation_module:
-		cultivation_module.log_message.connect(_on_log_message)
+	# [注意] 不需要连接 cultivation_module.log_message 信号
+	# 因为 GameUI 已经直接连接了 cultivation_module 的信号
+	# 如果这里再连接并转发，会导致消息重复
 
 func set_spell_module(module: SpellModule):
 	spell_module = module
@@ -95,6 +96,12 @@ func _show_sub_panel(active_panel: Control):
 	if active_panel:
 		active_panel.visible = true
 		current_panel = active_panel
+		
+		# 显示对应子模块的面板
+		if active_panel == cultivation_panel and cultivation_module:
+			cultivation_module.show_panel()
+		elif active_panel == spell_panel and spell_module:
+			spell_module.show_tab()
 	
 	# 更新按钮状态
 	_update_tab_buttons(active_panel)
@@ -131,10 +138,6 @@ func on_meridian_tab_pressed():
 
 func on_spell_tab_pressed():
 	show_spell_panel()
-
-# 处理子模块的日志消息
-func _on_log_message(message: String):
-	log_message.emit(message)
 
 # 更新UI（由GameUI调用）
 func update_ui():

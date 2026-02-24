@@ -137,20 +137,20 @@ const SPELLS = {
 			1: {
 				"spirit_cost": 130,
 				"use_count_required": 100,
-				"attribute_bonus": {"speed": 0.5},
-				"effect": {"type": "start_buff", "buff_type": "speed", "buff_value": 0.5, "trigger_chance": 1.0}
+				"attribute_bonus": {"speed": 0.1},
+				"effect": {"type": "start_buff", "buff_type": "speed", "buff_value": 0.1, "trigger_chance": 1.0}
 			},
 			2: {
 				"spirit_cost": 390,
 				"use_count_required": 200,
-				"attribute_bonus": {"speed": 0.6},
-				"effect": {"type": "start_buff", "buff_type": "speed", "buff_value": 0.6, "trigger_chance": 1.0}
+				"attribute_bonus": {"speed": 0.2},
+				"effect": {"type": "start_buff", "buff_type": "speed", "buff_value": 0.2, "trigger_chance": 1.0}
 			},
 			3: {
 				"spirit_cost": 1170,
 				"use_count_required": 500,
-				"attribute_bonus": {"speed": 0.7},
-				"effect": {"type": "start_buff", "buff_type": "speed", "buff_value": 0.7, "trigger_chance": 1.0}
+				"attribute_bonus": {"speed": 0.3},
+				"effect": {"type": "start_buff", "buff_type": "speed", "buff_value": 0.3, "trigger_chance": 1.0}
 			}
 		}
 	},

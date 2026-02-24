@@ -1,5 +1,7 @@
 extends TestBase
 
+const ItemData = preload("res://scripts/core/ItemData.gd")
+
 # 测试炼丹系统数据配置
 
 func get_test_name() -> String:
