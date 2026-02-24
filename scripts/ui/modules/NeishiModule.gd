@@ -1,109 +1,146 @@
 class_name NeishiModule extends Node
 
-# 内视模块 - 处理修炼、突破、术法等功能
+## 内视模块 - 管理内视页面的所有子模块
+## 负责协调修炼、突破、术法等功能
 
 # 信号
-signal cultivation_started
-signal breakthrough_requested
-signal spell_tab_selected(tab: String)
+signal sub_panel_changed(panel_name: String)
+signal log_message(message: String)
 
 # 引用
 var game_ui: Node = null
 var player: Node = null
-var cultivation_system: Node = null
-var spell_system: Node = null
+
+# 子模块
+var cultivation_module: CultivationModule = null
+var spell_module: SpellModule = null
 
 # UI节点引用（由GameUI设置）
 var neishi_panel: Control = null
 var cultivation_panel: Control = null
-var breakthrough_panel: Control = null
+var meridian_panel: Control = null
 var spell_panel: Control = null
+
+# 子Tab按钮
+var cultivation_tab: Button = null
+var meridian_tab: Button = null
+var spell_tab: Button = null
+
+# 当前活动面板
+var current_panel: Control = null
+
+# 状态
+var _is_initialized: bool = false
 
 func _ready():
 	pass
 
-func initialize(ui: Node, player_node: Node, cult_sys: Node, spell_sys: Node):
+func initialize(ui: Node, player_node: Node):
 	game_ui = ui
 	player = player_node
-	cultivation_system = cult_sys
-	spell_system = spell_sys
+	_is_initialized = true
+
+# 设置子模块
+func set_cultivation_module(module: CultivationModule):
+	cultivation_module = module
+	if cultivation_module:
+		cultivation_module.log_message.connect(_on_log_message)
+
+func set_spell_module(module: SpellModule):
+	spell_module = module
 
 # 显示内视Tab
 func show_tab():
 	if neishi_panel:
 		neishi_panel.visible = true
-		_show_cultivation_panel()
+	# 默认显示修炼面板
+	_show_sub_panel(cultivation_panel)
 
 # 隐藏内视Tab
 func hide_tab():
 	if neishi_panel:
 		neishi_panel.visible = false
 
-# 显示修炼页面
-func _show_cultivation_panel():
-	if cultivation_panel:
-		cultivation_panel.visible = true
-	if breakthrough_panel:
-		breakthrough_panel.visible = false
-	if spell_panel:
-		spell_panel.visible = false
-	update_cultivation_ui()
+# 显示子面板（修炼/经脉/术法）
+func show_cultivation_panel():
+	_show_sub_panel(cultivation_panel)
+	if cultivation_module:
+		cultivation_module.show_panel()
 
-# 显示突破页面
-func _show_breakthrough_panel():
-	if cultivation_panel:
-		cultivation_panel.visible = false
-	if breakthrough_panel:
-		breakthrough_panel.visible = true
-	if spell_panel:
-		spell_panel.visible = false
-	update_breakthrough_ui()
+func show_meridian_panel():
+	_show_sub_panel(meridian_panel)
 
-# 显示术法页面
-func _show_spell_panel():
+func show_spell_panel():
+	_show_sub_panel(spell_panel)
+	if spell_module:
+		spell_module.show_tab()
+
+# 内部：切换子面板
+func _show_sub_panel(active_panel: Control):
+	# 隐藏所有子面板
 	if cultivation_panel:
 		cultivation_panel.visible = false
-	if breakthrough_panel:
-		breakthrough_panel.visible = false
+	if meridian_panel:
+		meridian_panel.visible = false
 	if spell_panel:
-		spell_panel.visible = true
-	update_spell_ui()
-
-# 更新修炼UI
-func update_cultivation_ui():
-	if not player or not cultivation_system:
-		return
+		spell_panel.visible = false
 	
-	# 更新修炼相关信息
-	# 由GameUI调用具体节点更新
-
-# 更新突破UI
-func update_breakthrough_ui():
-	if not player:
-		return
+	# 隐藏所有子模块的面板
+	if cultivation_module and active_panel != cultivation_panel:
+		cultivation_module.hide_panel()
+	if spell_module and active_panel != spell_panel:
+		spell_module.hide_tab()
 	
-	# 更新突破相关信息
-	# 由GameUI调用具体节点更新
-
-# 更新术法UI
-func update_spell_ui():
-	if not spell_system:
-		return
+	# 显示选中的面板
+	if active_panel:
+		active_panel.visible = true
+		current_panel = active_panel
 	
-	# 更新术法列表
-	# 由GameUI调用具体节点更新
+	# 更新按钮状态
+	_update_tab_buttons(active_panel)
+	
+	# 发送信号
+	var panel_name = _get_panel_name(active_panel)
+	sub_panel_changed.emit(panel_name)
 
-# 开始修炼
-func start_cultivation():
-	if cultivation_system:
-		cultivation_system.start_cultivation()
-		cultivation_started.emit()
+# 获取面板名称
+func _get_panel_name(panel: Control) -> String:
+	if panel == cultivation_panel:
+		return "cultivation"
+	elif panel == meridian_panel:
+		return "meridian"
+	elif panel == spell_panel:
+		return "spell"
+	return ""
 
-# 停止修炼
-func stop_cultivation():
-	if cultivation_system:
-		cultivation_system.stop_cultivation()
+# 更新Tab按钮视觉状态
+func _update_tab_buttons(active_panel: Control):
+	if cultivation_tab:
+		cultivation_tab.modulate = Color(0.5, 0.5, 0.5) if active_panel == cultivation_panel else Color(1, 1, 1)
+	if meridian_tab:
+		meridian_tab.modulate = Color(0.5, 0.5, 0.5) if active_panel == meridian_panel else Color(1, 1, 1)
+	if spell_tab:
+		spell_tab.modulate = Color(0.5, 0.5, 0.5) if active_panel == spell_panel else Color(1, 1, 1)
 
-# 尝试突破
-func attempt_breakthrough():
-	breakthrough_requested.emit()
+# Tab按钮按下处理
+func on_cultivation_tab_pressed():
+	show_cultivation_panel()
+
+func on_meridian_tab_pressed():
+	show_meridian_panel()
+
+func on_spell_tab_pressed():
+	show_spell_panel()
+
+# 处理子模块的日志消息
+func _on_log_message(message: String):
+	log_message.emit(message)
+
+# 更新UI（由GameUI调用）
+func update_ui():
+	if cultivation_module:
+		cultivation_module.update_cultivate_button_state()
+
+# 清理
+func cleanup():
+	_is_initialized = false

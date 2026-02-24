@@ -6,6 +6,8 @@ const SettingsModule = preload("res://scripts/ui/modules/SettingsModule.gd")
 const DongfuModule = preload("res://scripts/ui/modules/DongfuModule.gd")
 const ChunaModule = preload("res://scripts/ui/modules/ChunaModule.gd")
 const SpellModule = preload("res://scripts/ui/modules/SpellModule.gd")
+const NeishiModule = preload("res://scripts/ui/modules/NeishiModule.gd")
+const CultivationModule = preload("res://scripts/ui/modules/CultivationModule.gd")
 
 var player: Node = null
 var inventory: Node = null
@@ -27,6 +29,12 @@ var chuna_module = null
 
 # 术法模块
 var spell_module = null
+
+# 内视模块（新增）
+var neishi_module = null
+
+# 修炼突破模块（新增）
+var cultivation_module = null
 
 # 境界背景素材配置
 const REALM_FRAME_TEXTURES = {
@@ -188,6 +196,7 @@ func _ready():
 	setup_dongfu_module()
 	setup_chuna_module()
 	setup_spell_module()
+	setup_neishi_module()
 	
 	# 在log_manager初始化后添加欢迎消息
 	add_log("欢迎来到修仙世界！")
@@ -253,10 +262,18 @@ func setup_log_manager():
 	log_manager.set_rich_text_label(log_text)
 
 func setup_button_connections():
-	if cultivate_button:
-		cultivate_button.pressed.connect(_on_cultivate_button_pressed)
-	if breakthrough_button:
-		breakthrough_button.pressed.connect(_on_breakthrough_button_pressed)
+	# [已迁移到CultivationModule] 修炼和突破按钮
+	# if cultivate_button:
+	# 	cultivate_button.pressed.connect(_on_cultivate_button_pressed)
+	# if breakthrough_button:
+	# 	breakthrough_button.pressed.connect(_on_breakthrough_button_pressed)
+	
+	# 使用新模块连接
+	if cultivate_button and cultivation_module:
+		cultivate_button.pressed.connect(cultivation_module.on_cultivate_button_pressed)
+	if breakthrough_button and cultivation_module:
+		breakthrough_button.pressed.connect(cultivation_module.on_breakthrough_button_pressed)
+	
 	if tab_neishi:
 		tab_neishi.pressed.connect(_on_tab_neishi_pressed)
 	if tab_chuna:
@@ -268,13 +285,21 @@ func setup_button_connections():
 	if tab_settings:
 		tab_settings.pressed.connect(_on_tab_settings_pressed)
 	
-	# 内室子Tab连接
-	if cultivation_tab:
-		cultivation_tab.pressed.connect(_on_cultivation_tab_pressed)
-	if meridian_tab:
-		meridian_tab.pressed.connect(_on_meridian_tab_pressed)
-	if spell_tab:
-		spell_tab.pressed.connect(_on_spell_tab_pressed)
+	# [已迁移到NeishiModule] 内室子Tab连接
+	# if cultivation_tab:
+	# 	cultivation_tab.pressed.connect(_on_cultivation_tab_pressed)
+	# if meridian_tab:
+	# 	meridian_tab.pressed.connect(_on_meridian_tab_pressed)
+	# if spell_tab:
+	# 	spell_tab.pressed.connect(_on_spell_tab_pressed)
+	
+	# 使用新模块连接
+	if cultivation_tab and neishi_module:
+		cultivation_tab.pressed.connect(neishi_module.on_cultivation_tab_pressed)
+	if meridian_tab and neishi_module:
+		meridian_tab.pressed.connect(neishi_module.on_meridian_tab_pressed)
+	if spell_tab and neishi_module:
+		spell_tab.pressed.connect(neishi_module.on_spell_tab_pressed)
 	
 	# 初始化历练区域按钮
 	_init_lianli_area_buttons()
@@ -379,6 +404,56 @@ func setup_spell_module():
 	
 	# 初始化模块
 	spell_module.initialize(self, player, spell_system, spell_data_ref)
+
+func setup_neishi_module():
+	# 创建修炼突破模块
+	cultivation_module = CultivationModule.new()
+	cultivation_module.name = "CultivationModule"
+	add_child(cultivation_module)
+	
+	# 设置UI节点引用
+	cultivation_module.cultivation_panel = cultivation_panel
+	cultivation_module.cultivate_button = cultivate_button
+	cultivation_module.breakthrough_button = breakthrough_button
+	
+	# 初始化模块
+	var game_manager = get_node("/root/GameManager")
+	var cult_system = game_manager.get_cultivation_system() if game_manager else null
+	var lianli_sys = game_manager.get_lianli_system() if game_manager else null
+	cultivation_module.initialize(self, player, cult_system, lianli_sys, item_data_ref)
+	
+	# 连接信号
+	cultivation_module.log_message.connect(_on_cultivation_module_log)
+	
+	# 创建内视模块
+	neishi_module = NeishiModule.new()
+	neishi_module.name = "NeishiModule"
+	add_child(neishi_module)
+	
+	# 设置UI节点引用
+	neishi_module.neishi_panel = neishi_panel
+	neishi_module.cultivation_panel = cultivation_panel
+	neishi_module.meridian_panel = meridian_panel
+	neishi_module.spell_panel = spell_panel
+	neishi_module.cultivation_tab = cultivation_tab
+	neishi_module.meridian_tab = meridian_tab
+	neishi_module.spell_tab = spell_tab
+	
+	# 初始化模块
+	neishi_module.initialize(self, player)
+	
+	# 设置子模块
+	neishi_module.set_cultivation_module(cultivation_module)
+	neishi_module.set_spell_module(spell_module)
+	
+	# 连接信号
+	neishi_module.log_message.connect(_on_neishi_module_log)
+
+func _on_cultivation_module_log(message: String):
+	add_log(message)
+
+func _on_neishi_module_log(message: String):
+	add_log(message)
 
 func load_game_data():
 	var game_manager = get_node("/root/GameManager")
@@ -507,6 +582,9 @@ func show_neishi_tab():
 	# 隐藏炼丹房
 	if alchemy_module:
 		alchemy_module.hide_alchemy_room()
+	# 隐藏储纳Tab
+	if chuna_module:
+		chuna_module.hide_tab()
 	tab_neishi.disabled = true
 	tab_chuna.disabled = false
 	if tab_dongfu:
@@ -514,8 +592,12 @@ func show_neishi_tab():
 	tab_lianli.disabled = false
 	tab_settings.disabled = false
 
-	# 初始化内室子Tab，默认显示修炼页面
-	_show_neishi_sub_panel(cultivation_panel)
+	# [已迁移到NeishiModule] 初始化内室子Tab，默认显示修炼页面
+	# _show_neishi_sub_panel(cultivation_panel)
+	
+	# 使用新模块
+	if neishi_module:
+		neishi_module.show_tab()
 
 func show_chuna_tab():
 	neishi_panel.visible = false
@@ -1059,29 +1141,34 @@ func update_realm_background(realm_name: String):
 	if texture:
 		top_bar_background.texture = texture
 
+# [已迁移到CultivationModule] 修炼按钮处理
+# func _on_cultivate_button_pressed():
+# 	if not player:
+# 		return
+# 	
+# 	var game_manager = get_node("/root/GameManager")
+# 	var cult_system = game_manager.get_cultivation_system()
+# 	
+# 	if player.get_is_cultivating():
+# 		player.stop_cultivation()
+# 		cult_system.stop_cultivation()
+# 		cultivate_button.text = "修炼"
+# 		add_log("停止修炼")
+# 	else:
+# 		# 如果正在历练或等待中，先停止历练
+# 		if lianli_system and (lianli_system.is_in_lianli or lianli_system.is_waiting):
+# 			lianli_system.end_lianli()
+# 			add_log("已退出历练区域，停止历练")
+# 			show_neishi_tab()
+# 		
+# 		player.start_cultivation()
+# 		cult_system.start_cultivation()
+# 		cultivate_button.text = "停止修炼"
+# 		add_log("开始修炼")
+
+# 新模块会处理修炼按钮，这里保留空函数占位
 func _on_cultivate_button_pressed():
-	if not player:
-		return
-	
-	var game_manager = get_node("/root/GameManager")
-	var cult_system = game_manager.get_cultivation_system()
-	
-	if player.get_is_cultivating():
-		player.stop_cultivation()
-		cult_system.stop_cultivation()
-		cultivate_button.text = "修炼"
-		add_log("停止修炼")
-	else:
-		# 如果正在历练或等待中，先停止历练
-		if lianli_system and (lianli_system.is_in_lianli or lianli_system.is_waiting):
-			lianli_system.end_lianli()
-			add_log("已退出历练区域，停止历练")
-			show_neishi_tab()
-		
-		player.start_cultivation()
-		cult_system.start_cultivation()
-		cultivate_button.text = "停止修炼"
-		add_log("开始修炼")
+	pass
 
 func _on_lianli_started(area_id: String):
 	# 历练开始（进入历练区域）
@@ -1246,67 +1333,72 @@ func _on_lianli_action_log(message: String):
 	else:
 		add_log(message)
 
-func _on_breakthrough_button_pressed():
-	if not player:
-		return
-	
-	var result = player.attempt_breakthrough()
-	if result.get("success", false):
-		# 突破成功后恢复生命值到满
-		player.health = player.max_health
-		var stone_cost = result.get("stone_cost", 0)
-		var energy_cost = result.get("energy_cost", 0)
-		var materials = result.get("materials", {})
-		var type = result.get("type", "level")
-		
-		if type == "level":
-			var new_level = result.get("new_level", 1)
-			var success_msg = build_breakthrough_message(stone_cost, energy_cost, materials, "突破成功！")
-			add_log(success_msg)
-			add_log("升至第" + str(new_level) + "层！气血值已恢复满！")
-		else:
-			var new_realm = result.get("new_realm", "")
-			var success_msg = build_breakthrough_message(stone_cost, energy_cost, materials, "晋升成功！")
-			add_log(success_msg)
-			add_log("进入" + new_realm + "！气血值已恢复满！")
-	else:
-		var reason = result.get("reason", "突破失败")
-		var stone_cost = result.get("stone_cost", 0)
-		var energy_cost = result.get("energy_cost", 0)
-		var stone_current = result.get("stone_current", 0)
-		var energy_current = result.get("energy_current", 0)
-		var materials = result.get("materials", {})
-		
-		if reason == "灵气不足":
-			add_log("突破失败：灵气不足 (" + str(energy_current) + "/" + str(energy_cost) + ")")
-		elif reason == "灵石不足":
-			add_log("突破失败：灵石不足 (" + str(stone_current) + "/" + str(stone_cost) + ")")
-		elif reason.ends_with("不足"):
-			# 材料不足提示
-			for material_id in materials.keys():
-				var material_info = materials[material_id]
-				if not material_info.get("enough", true):
-					var material_name = item_data_ref.get_item_name(material_id)
-					var current = material_info.get("current", 0)
-					var required = material_info.get("required", 0)
-					add_log("突破失败：" + material_name + "不足 (" + str(current) + "/" + str(required) + ")")
-					break
-		else:
-			add_log("突破失败：" + reason)
+# [已迁移到CultivationModule] 突破按钮处理
+# func _on_breakthrough_button_pressed():
+# 	if not player:
+# 		return
+# 	
+# 	var result = player.attempt_breakthrough()
+# 	if result.get("success", false):
+# 		# 突破成功后恢复生命值到满
+# 		player.health = player.max_health
+# 		var stone_cost = result.get("stone_cost", 0)
+# 		var energy_cost = result.get("energy_cost", 0)
+# 		var materials = result.get("materials", {})
+# 		var type = result.get("type", "level")
+# 		
+# 		if type == "level":
+# 			var new_level = result.get("new_level", 1)
+# 			var success_msg = build_breakthrough_message(stone_cost, energy_cost, materials, "突破成功！")
+# 			add_log(success_msg)
+# 			add_log("升至第" + str(new_level) + "层！气血值已恢复满！")
+# 		else:
+# 			var new_realm = result.get("new_realm", "")
+# 			var success_msg = build_breakthrough_message(stone_cost, energy_cost, materials, "晋升成功！")
+# 			add_log(success_msg)
+# 			add_log("进入" + new_realm + "！气血值已恢复满！")
+# 	else:
+# 		var reason = result.get("reason", "突破失败")
+# 		var stone_cost = result.get("stone_cost", 0)
+# 		var energy_cost = result.get("energy_cost", 0)
+# 		var stone_current = result.get("stone_current", 0)
+# 		var energy_current = result.get("energy_current", 0)
+# 		var materials = result.get("materials", {})
+# 		
+# 		if reason == "灵气不足":
+# 			add_log("突破失败：灵气不足 (" + str(energy_current) + "/" + str(energy_cost) + ")")
+# 		elif reason == "灵石不足":
+# 			add_log("突破失败：灵石不足 (" + str(stone_current) + "/" + str(stone_cost) + ")")
+# 		elif reason.ends_with("不足"):
+# 			# 材料不足提示
+# 			for material_id in materials.keys():
+# 				var material_info = materials[material_id]
+# 				if not material_info.get("enough", true):
+# 					var material_name = item_data_ref.get_item_name(material_id)
+# 					var current = material_info.get("current", 0)
+# 					var required = material_info.get("required", 0)
+# 					add_log("突破失败：" + material_name + "不足 (" + str(current) + "/" + str(required) + ")")
+# 					break
+# 		else:
+# 			add_log("突破失败：" + reason)
 
-# 构建突破消息
-func build_breakthrough_message(stone_cost: int, energy_cost: int, materials: Dictionary, suffix: String) -> String:
-	var msg = "消耗灵石" + str(stone_cost) + "、灵气" + str(energy_cost)
-	
-	for material_id in materials.keys():
-		var material_info = materials[material_id]
-		var required_count = material_info.get("required", 0)
-		if required_count > 0:
-			var material_name = item_data_ref.get_item_name(material_id)
-			msg += "、" + material_name + str(required_count)
-	
-	msg += "，" + suffix
-	return msg
+# 新模块会处理突破按钮，这里保留空函数占位
+func _on_breakthrough_button_pressed():
+	pass
+
+# [已迁移到CultivationModule] 构建突破消息
+# func build_breakthrough_message(stone_cost: int, energy_cost: int, materials: Dictionary, suffix: String) -> String:
+# 	var msg = "消耗灵石" + str(stone_cost) + "、灵气" + str(energy_cost)
+# 	
+# 	for material_id in materials.keys():
+# 		var material_info = materials[material_id]
+# 		var required_count = material_info.get("required", 0)
+# 		if required_count > 0:
+# 			var material_name = item_data_ref.get_item_name(material_id)
+# 			msg += "、" + material_name + str(required_count)
+# 	
+# 	msg += "，" + suffix
+# 	return msg
 
 func add_log(message: String):
 	if log_manager:
@@ -1365,39 +1457,51 @@ func update_account_ui():
 		else:
 			add_log("头像加载失败: " + avatar_path)
 
-func _update_neishi_tab_buttons(active_panel: Control):
-	# 更新按钮视觉状态（通过modulate颜色区分）
-	if cultivation_tab:
-		cultivation_tab.modulate = Color(0.5, 0.5, 0.5) if active_panel == cultivation_panel else Color(1, 1, 1)
-	if meridian_tab:
-		meridian_tab.modulate = Color(0.5, 0.5, 0.5) if active_panel == meridian_panel else Color(1, 1, 1)
-	if spell_tab:
-		spell_tab.modulate = Color(0.5, 0.5, 0.5) if active_panel == spell_panel else Color(1, 1, 1)
+# [已迁移到NeishiModule] 更新内视Tab按钮状态
+# func _update_neishi_tab_buttons(active_panel: Control):
+# 	# 更新按钮视觉状态（通过modulate颜色区分）
+# 	if cultivation_tab:
+# 		cultivation_tab.modulate = Color(0.5, 0.5, 0.5) if active_panel == cultivation_panel else Color(1, 1, 1)
+# 	if meridian_tab:
+# 		meridian_tab.modulate = Color(0.5, 0.5, 0.5) if active_panel == meridian_panel else Color(1, 1, 1)
+# 	if spell_tab:
+# 		spell_tab.modulate = Color(0.5, 0.5, 0.5) if active_panel == spell_panel else Color(1, 1, 1)
 
-# 内室子Tab切换函数
+# [已迁移到NeishiModule] 内室子Tab切换函数
+# func _on_cultivation_tab_pressed():
+# 	_show_neishi_sub_panel(cultivation_panel)
+
+# func _on_meridian_tab_pressed():
+# 	_show_neishi_sub_panel(meridian_panel)
+
+# func _on_spell_tab_pressed():
+# 	_show_neishi_sub_panel(spell_panel)
+# 	if spell_module:
+# 		spell_module.show_tab()
+
+# 新模块会处理Tab切换，这里保留空函数占位
 func _on_cultivation_tab_pressed():
-	_show_neishi_sub_panel(cultivation_panel)
+	pass
 
 func _on_meridian_tab_pressed():
-	_show_neishi_sub_panel(meridian_panel)
+	pass
 
 func _on_spell_tab_pressed():
-	_show_neishi_sub_panel(spell_panel)
-	if spell_module:
-		spell_module.show_tab()
+	pass
 
-func _show_neishi_sub_panel(active_panel: Control):
-	# 隐藏所有子面板
-	if cultivation_panel:
-		cultivation_panel.visible = false
-	if meridian_panel:
-		meridian_panel.visible = false
-	if spell_panel:
-		spell_panel.visible = false
-	
-	# 显示选中的面板
-	if active_panel:
-		active_panel.visible = true
-	
-	# 更新按钮状态
-	_update_neishi_tab_buttons(active_panel)
+# [已迁移到NeishiModule] 显示内视子面板
+# func _show_neishi_sub_panel(active_panel: Control):
+# 	# 隐藏所有子面板
+# 	if cultivation_panel:
+# 		cultivation_panel.visible = false
+# 	if meridian_panel:
+# 		meridian_panel.visible = false
+# 	if spell_panel:
+# 		spell_panel.visible = false
+# 	
+# 	# 显示选中的面板
+# 	if active_panel:
+# 		active_panel.visible = true
+# 	
+# 	# 更新按钮状态
+# 	_update_neishi_tab_buttons(active_panel)
