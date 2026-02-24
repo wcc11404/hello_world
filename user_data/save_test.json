@@ -1,0 +1,1077 @@
+{
+	"account": {
+		"avatar": "avatar_abstract.png",
+		"nickname": "hsams",
+		"username": "test"
+	},
+	"inventory": {
+		"capacity": 50,
+		"slots": [
+			{
+				"count": 5.0,
+				"empty": false,
+				"id": "body_integration_pill"
+			},
+			{
+				"count": 2.0,
+				"empty": false,
+				"id": "bug_pill"
+			},
+			{
+				"count": 5.0,
+				"empty": false,
+				"id": "foundation_pill"
+			},
+			{
+				"count": 5.0,
+				"empty": false,
+				"id": "golden_core_pill"
+			},
+			{
+				"count": 10.0,
+				"empty": false,
+				"id": "health_pill"
+			},
+			{
+				"count": 5.0,
+				"empty": false,
+				"id": "mahayana_pill"
+			},
+			{
+				"count": 5.0,
+				"empty": false,
+				"id": "nascent_soul_pill"
+			},
+			{
+				"count": 1.0,
+				"empty": false,
+				"id": "spell_basic_boxing_techniques"
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 5.0,
+				"empty": false,
+				"id": "spirit_pill"
+			},
+			{
+				"count": 5.0,
+				"empty": false,
+				"id": "spirit_separation_pill"
+			},
+			{
+				"count": 4297191.0,
+				"empty": false,
+				"id": "spirit_stone"
+			},
+			{
+				"count": 9999999.0,
+				"empty": false,
+				"id": "spirit_stone"
+			},
+			{
+				"count": 9999999.0,
+				"empty": false,
+				"id": "spirit_stone"
+			},
+			{
+				"count": 9999999.0,
+				"empty": false,
+				"id": "spirit_stone"
+			},
+			{
+				"count": 9999999.0,
+				"empty": false,
+				"id": "spirit_stone"
+			},
+			{
+				"count": 9999999.0,
+				"empty": false,
+				"id": "spirit_stone"
+			},
+			{
+				"count": 7.0,
+				"empty": false,
+				"id": "tribulation_pill"
+			},
+			{
+				"count": 5.0,
+				"empty": false,
+				"id": "void_refining_pill"
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			},
+			{
+				"count": 0.0,
+				"empty": true,
+				"id": ""
+			}
+		]
+	},
+	"player": {
+		"has_alchemy_furnace": false,
+		"health": 34600800,
+		"learned_recipes": [],
+		"realm": "渡劫期",
+		"realm_level": 7,
+		"spirit_energy": 208718798.146399,
+		"tower_highest_floor": 0
+	},
+	"spell_system": {
+		"equipped_spells": {
+			"0": [
+				"basic_breathing"
+			],
+			"1": [
+				"basic_boxing_techniques",
+				"thunder_strike"
+			],
+			"2": [
+				"basic_defense",
+				"basic_health"
+			],
+			"3": []
+		},
+		"player_spells": {
+			"basic_boxing_techniques": {
+				"charged_spirit": 0,
+				"level": 1,
+				"obtained": true,
+				"use_count": 1
+			},
+			"basic_breathing": {
+				"charged_spirit": 0,
+				"level": 1,
+				"obtained": true,
+				"use_count": 9
+			},
+			"basic_defense": {
+				"charged_spirit": 0,
+				"level": 1,
+				"obtained": true,
+				"use_count": 8
+			},
+			"basic_health": {
+				"charged_spirit": 0,
+				"level": 1,
+				"obtained": true,
+				"use_count": 8
+			},
+			"basic_steps": {
+				"charged_spirit": 0,
+				"level": 1,
+				"obtained": true,
+				"use_count": 0
+			},
+			"thunder_strike": {
+				"charged_spirit": 0,
+				"level": 1,
+				"obtained": true,
+				"use_count": 1
+			}
+		}
+	},
+	"timestamp": 1771860493.49546,
+	"version": "1.3"
+}
