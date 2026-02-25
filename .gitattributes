@@ -1,0 +1,23 @@
+# Godot 项目文件换行符处理
+*.import text eol=lf
+*.godot text eol=lf
+*.gd text eol=lf
+*.cs text eol=lf
+*.sh text eol=lf
+
+# 二进制文件
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.bmp binary
+*.tga binary
+*.webp binary
+*.mp3 binary
+*.ogg binary
+*.wav binary
+*.mp4 binary
+*.webm binary
+*.ttf binary
+*.otf binary
+*.fontdata binary
