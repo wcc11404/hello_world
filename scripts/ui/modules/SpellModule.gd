@@ -562,8 +562,8 @@ func _format_effect_description(description: String, effect: Dictionary) -> Stri
 
 func _add_log(message: String):
 	"""添加日志"""
-	if game_ui and game_ui.has_method("add_log"):
-		game_ui.add_log(message)
+	if game_ui and game_ui.log_manager:
+		game_ui.log_manager.add_system_log(message)
 
 # 公共接口
 ## 获取当前查看的术法ID

@@ -27,19 +27,6 @@ func add_system_log(message: String):
 func add_battle_log(message: String):
 	_add_log_internal(message, LogType.BATTLE)
 
-func add_log(message: String):
-	# 根据消息内容自动判断类型
-	var log_type = _detect_log_type(message)
-	_add_log_internal(message, log_type)
-
-func _detect_log_type(message: String) -> LogType:
-	# 战斗消息关键词
-	var battle_keywords = ["遭遇", "攻击", "伤害", "历练成功", "历练失败", "通关", "敌人"]
-	for keyword in battle_keywords:
-		if keyword in message:
-			return LogType.BATTLE
-	return LogType.SYSTEM
-
 func _add_log_internal(message: String, log_type: LogType):
 	var timestamp = _get_timestamp()
 	var type_tag = _get_type_tag(log_type)

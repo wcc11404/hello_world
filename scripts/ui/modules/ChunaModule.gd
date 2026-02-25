@@ -583,8 +583,8 @@ func _on_sort_button_pressed():
 
 # 辅助函数：添加日志
 func _add_log(message: String):
-	if game_ui and game_ui.has_method("add_log"):
-		game_ui.add_log(message)
+	if game_ui and game_ui.log_manager:
+		game_ui.log_manager.add_system_log(message)
 	else:
 		print("[ChunaModule] " + message)
 

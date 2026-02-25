@@ -210,8 +210,9 @@ func _ready():
 	show_neishi_tab()
 	
 	# 在log_manager初始化后添加欢迎消息
-	add_log("欢迎来到修仙世界！")
-	add_log("点击下方按钮开始修炼")
+	if log_manager:
+		log_manager.add_system_log("欢迎来到修仙世界！")
+		log_manager.add_system_log("点击下方按钮开始修炼")
 	
 	# 加载游戏数据（模块初始化完成后）
 	load_game_data()
@@ -460,10 +461,12 @@ func setup_neishi_module():
 	neishi_module.log_message.connect(_on_neishi_module_log)
 
 func _on_cultivation_module_log(message: String):
-	add_log(message)
+	if log_manager:
+		log_manager.add_system_log(message)
 
 func _on_neishi_module_log(message: String):
-	add_log(message)
+	if log_manager:
+		log_manager.add_system_log(message)
 
 func setup_lianli_module():
 	# 创建历练模块
@@ -499,7 +502,8 @@ func setup_lianli_module():
 	lianli_module.log_message.connect(_on_lianli_module_log)
 
 func _on_lianli_module_log(message: String):
-	add_log(message)
+	if log_manager:
+		log_manager.add_system_log(message)
 
 func load_game_data():
 	var game_manager = get_node("/root/GameManager")
@@ -579,8 +583,6 @@ func connect_lianli_signals(battle_sys: Node):
 			battle_sys.lianli_round.connect(lianli_module.on_lianli_round)
 		if battle_sys.has_signal("lianli_win"):
 			battle_sys.lianli_win.connect(lianli_module.on_lianli_win)
-		if battle_sys.has_signal("lianli_lose"):
-			battle_sys.lianli_lose.connect(lianli_module.on_lianli_lose)
 		
 		lianli_signals_connected = true
 
@@ -661,7 +663,8 @@ func _on_item_added(item_id: String, count: int):
 	if chuna_module:
 		chuna_module.update_inventory_ui()
 	update_ui()  # 更新灵石数量显示
-	add_log("获得物品: " + item_data_ref.get_item_name(item_id) + " x" + str(count))
+	if log_manager:
+		log_manager.add_system_log("获得物品: " + item_data_ref.get_item_name(item_id) + " x" + str(count))
 
 func show_neishi_tab():
 	neishi_panel.visible = true
@@ -913,10 +916,6 @@ func refresh_inventory_ui():
 		chuna_module.update_inventory_ui()
 
 # 突破按钮处理已迁移到 CultivationModule
-
-func add_log(message: String):
-	if log_manager:
-		log_manager.add_log(message)
 
 func _on_offline_reward_received(rewards: Dictionary):
 	if rewards and rewards.get("offline_hours", 0) > 0:

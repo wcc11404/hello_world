@@ -97,9 +97,10 @@ func on_cultivate_button_pressed():
 		cultivate_button.text = "修炼"
 		cultivation_stopped.emit()
 	else:
-		# 如果正在历练或等待中，先停止历练（日志由LianliSystem.end_lianli()输出）
+		# 如果正在历练或等待中，先停止历练
 		if lianli_system and (lianli_system.is_in_lianli or lianli_system.is_waiting):
 			lianli_system.end_lianli()
+			log_message.emit("已退出历练区域")
 			# 通知GameUI切换回内视页面
 			if game_ui and game_ui.has_method("show_neishi_tab"):
 				game_ui.show_neishi_tab()

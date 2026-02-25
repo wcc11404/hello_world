@@ -51,11 +51,11 @@ func _on_save_pressed():
 	
 	if save_manager:
 		var result = save_manager.save_game()
-		if game_ui and game_ui.has_method("add_log"):
+		if game_ui and game_ui.log_manager:
 			if result:
-				game_ui.add_log("存档成功！")
+				game_ui.log_manager.add_system_log("存档成功！")
 			else:
-				game_ui.add_log("存档失败...")
+				game_ui.log_manager.add_system_log("存档失败...")
 		return result
 	return false
 
@@ -73,16 +73,16 @@ func _on_load_pressed():
 	var game_manager = get_node_or_null("/root/GameManager")
 	if game_manager:
 		var result = game_manager.load_game()
-		if game_ui and game_ui.has_method("add_log"):
+		if game_ui and game_ui.log_manager:
 			if result:
-				game_ui.add_log("读档成功！")
+				game_ui.log_manager.add_system_log("读档成功！")
 				# 刷新UI
 				if game_ui.has_method("update_ui"):
 					game_ui.update_ui()
 				if game_ui.has_method("refresh_inventory_ui"):
 					game_ui.refresh_inventory_ui()
 			else:
-				game_ui.add_log("读档失败...")
+				game_ui.log_manager.add_system_log("读档失败...")
 		return result
 	return false
 

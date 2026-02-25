@@ -111,19 +111,19 @@ const SPELLS = {
 				"spirit_cost": 120,
 				"use_count_required": 100,
 				"attribute_bonus": {"defense": 1.02},
-				"effect": {"type": "start_buff", "buff_type": "defense", "buff_percent": 0.15, "trigger_chance": 1.0}
+				"effect": {"type": "start_buff", "buff_type": "defense", "buff_percent": 0.15, "trigger_chance": 1.0, "log_effect": "防御提升15%"}
 			},
 			2: {
 				"spirit_cost": 360,
 				"use_count_required": 200,
 				"attribute_bonus": {"defense": 1.04},
-				"effect": {"type": "start_buff", "buff_type": "defense", "buff_percent": 0.16, "trigger_chance": 1.0}
+				"effect": {"type": "start_buff", "buff_type": "defense", "buff_percent": 0.16, "trigger_chance": 1.0, "log_effect": "防御提升16%"}
 			},
 			3: {
 				"spirit_cost": 1080,
 				"use_count_required": 500,
 				"attribute_bonus": {"defense": 1.06},
-				"effect": {"type": "start_buff", "buff_type": "defense", "buff_percent": 0.17, "trigger_chance": 1.0}
+				"effect": {"type": "start_buff", "buff_type": "defense", "buff_percent": 0.17, "trigger_chance": 1.0, "log_effect": "防御提升17%"}
 			}
 		}
 	},
@@ -138,19 +138,19 @@ const SPELLS = {
 				"spirit_cost": 130,
 				"use_count_required": 100,
 				"attribute_bonus": {"speed": 0.1},
-				"effect": {"type": "start_buff", "buff_type": "speed", "buff_value": 0.1, "trigger_chance": 1.0}
+				"effect": {"type": "start_buff", "buff_type": "speed", "buff_value": 0.1, "trigger_chance": 1.0, "log_effect": "速度+0.1"}
 			},
 			2: {
 				"spirit_cost": 390,
 				"use_count_required": 200,
 				"attribute_bonus": {"speed": 0.2},
-				"effect": {"type": "start_buff", "buff_type": "speed", "buff_value": 0.2, "trigger_chance": 1.0}
+				"effect": {"type": "start_buff", "buff_type": "speed", "buff_value": 0.2, "trigger_chance": 1.0, "log_effect": "速度+0.2"}
 			},
 			3: {
 				"spirit_cost": 1170,
 				"use_count_required": 500,
 				"attribute_bonus": {"speed": 0.3},
-				"effect": {"type": "start_buff", "buff_type": "speed", "buff_value": 0.3, "trigger_chance": 1.0}
+				"effect": {"type": "start_buff", "buff_type": "speed", "buff_value": 0.3, "trigger_chance": 1.0, "log_effect": "速度+0.3"}
 			}
 		}
 	},
@@ -165,19 +165,19 @@ const SPELLS = {
 				"spirit_cost": 120,
 				"use_count_required": 100,
 				"attribute_bonus": {"health": 1.02},
-				"effect": {"type": "start_buff", "buff_type": "health", "buff_percent": 0.005, "trigger_chance": 1.0}
+				"effect": {"type": "start_buff", "buff_type": "health", "buff_percent": 0.005, "trigger_chance": 1.0, "log_effect": "气血上限提升0.5%"}
 			},
 			2: {
 				"spirit_cost": 360,
 				"use_count_required": 200,
 				"attribute_bonus": {"health": 1.04},
-				"effect": {"type": "start_buff", "buff_type": "health", "buff_percent": 0.01, "trigger_chance": 1.0}
+				"effect": {"type": "start_buff", "buff_type": "health", "buff_percent": 0.01, "trigger_chance": 1.0, "log_effect": "气血上限提升1%"}
 			},
 			3: {
 				"spirit_cost": 1080,
 				"use_count_required": 500,
 				"attribute_bonus": {"health": 1.06},
-				"effect": {"type": "start_buff", "buff_type": "health", "buff_percent": 0.015, "trigger_chance": 1.0}
+				"effect": {"type": "start_buff", "buff_type": "health", "buff_percent": 0.015, "trigger_chance": 1.0, "log_effect": "气血上限提升1.5%"}
 			}
 		}
 	},

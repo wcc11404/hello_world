@@ -109,7 +109,8 @@ func start_lianli_in_area(area_id: String) -> bool:
 	
 	# 检查玩家血量，小于等于0不能进入历练
 	if player and player.health <= 0:
-		lianli_action_log.emit("气血不足，无法进入历练区域")
+		var area_name = lianli_area_data.get_area_name(area_id) if lianli_area_data else "历练区域"
+		lianli_action_log.emit("气血不足，无法进入" + area_name)
 		return false
 	
 	current_area_id = area_id
@@ -128,7 +129,8 @@ func start_endless_tower() -> bool:
 	
 	# 检查玩家血量
 	if player and player.health <= 0:
-		lianli_action_log.emit("气血不足，无法进入无尽塔")
+		var tower_name = endless_tower_data.get_tower_name() if endless_tower_data else "无尽塔"
+		lianli_action_log.emit("气血不足，无法进入" + tower_name)
 		return false
 	
 	# 设置无尽塔状态
@@ -255,6 +257,7 @@ func start_battle(enemy_data_dict: Dictionary) -> bool:
 	return true
 
 # 结束历练（完全退出）
+# 注意：日志由调用方输出，此函数只负责清理状态
 func end_lianli():
 	is_in_lianli = false
 	is_in_battle = false
@@ -266,7 +269,6 @@ func end_lianli():
 	_restore_health_after_combat()
 	_reset_combat_buffs()
 	_cached_spell_system = null  # 清除缓存
-	lianli_action_log.emit("已退出历练区域")
 	lianli_ended.emit(false)
 
 # 结束当前战斗
@@ -301,15 +303,16 @@ func _trigger_start_spells():
 		match effect_type:
 			"start_buff":
 				var buff_type = effect_data.get("buff_type", "")
+				var log_effect = effect_data.get("log_effect", "")
 				match buff_type:
 					"defense":
 						var buff_percent = effect_data.get("buff_percent", 0.0)
 						combat_buffs.defense_percent += buff_percent
-						lianli_action_log.emit("战斗开始：" + spell_name + "生效，防御提升" + _format_percent(buff_percent))
+						lianli_action_log.emit("战斗开始，使用" + spell_name + "，" + log_effect)
 					"speed":
 						var buff_value = effect_data.get("buff_value", 0.0)
 						combat_buffs.speed_bonus += buff_value
-						lianli_action_log.emit("战斗开始：" + spell_name + "生效，速度+" + str(buff_value))
+						lianli_action_log.emit("战斗开始，使用" + spell_name + "，" + log_effect)
 					"health":
 						var health_percent = effect_data.get("buff_percent", 0.0)
 						if player:
@@ -321,7 +324,7 @@ func _trigger_start_spells():
 							player.set_combat_buffs(combat_buffs)
 							# 增加当前气血（临时）
 							player.health += bonus_health
-						lianli_action_log.emit("战斗开始：" + spell_name + "生效，气血上限提升" + _format_percent(health_percent))
+						lianli_action_log.emit("战斗开始，使用" + spell_name + "，" + log_effect)
 		
 		# 增加使用次数
 		if not spell_id.is_empty():
@@ -521,13 +524,12 @@ func _handle_battle_victory():
 
 	# 检查是否是特殊区域（有special_drops）
 	if lianli_area_data and lianli_area_data.is_single_boss_area(current_area_id):
-		# 特殊区域掉落
+		# 特殊区域掉落（物品进入储纳时会由储纳系统提示）
 		var special_drops = lianli_area_data.get_special_drops(current_area_id)
 		for item_id in special_drops.keys():
 			var amount = special_drops[item_id]
 			loot.append({"item_id": item_id, "amount": amount})
 			lianli_reward.emit(item_id, amount, "lianli")
-		lianli_action_log.emit("战斗胜利！获得特殊奖励")
 	else:
 		# 普通掉落处理（从敌人配置中读取）
 		var drops_config = current_enemy.get("drops", {})
@@ -591,9 +593,8 @@ func _handle_tower_victory():
 		for item_id in reward.keys():
 			var amount = reward[item_id]
 			lianli_reward.emit(item_id, amount, "tower")
-		lianli_action_log.emit("通关第" + str(current_tower_floor) + "层！获得奖励！")
-	else:
-		lianli_action_log.emit("通关第" + str(current_tower_floor) + "层！")
+	
+	lianli_action_log.emit("通关第" + str(current_tower_floor) + "层")
 	
 	# 检查是否达到上限
 	var max_floor = endless_tower_data.get_max_floor()
