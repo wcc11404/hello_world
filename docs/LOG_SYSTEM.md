@@ -111,19 +111,20 @@ LogManager.add_xxx_log()
 
 | 系统/模块 | 输出方式 | 典型日志 |
 |-----------|----------|----------|
-| **CultivationSystem** | `cultivation_log`信号 → CultivationModule | `停止修炼` |
+| **CultivationSystem** | `log_message`信号 → CultivationModule | `停止修炼` |
 | **CultivationModule** | `log_message`信号 → GameUI | `开始修炼...`、`突破成功/失败` |
 | **LianliModule** | `log_message`信号 → GameUI | `已退出历练区域` |
-| **ChunaModule** | 直接调用`log_manager.add_system_log()` | `获得物品`、`使用物品` |
-| **SpellModule** | 直接调用`log_manager.add_system_log()` | `装备术法`、`术法升级成功` |
-| **SettingsModule** | 直接调用`log_manager.add_system_log()` | `存档成功`、`读档成功` |
+| **ChunaModule** | `log_message`信号 → GameUI | `获得物品`、`使用物品` |
+| **SpellModule** | `log_message`信号 → GameUI | `装备术法`、`术法升级成功` |
+| **SettingsModule** | `log_message`信号 → GameUI | `存档成功`、`读档成功` |
+| **AlchemyModule** | `log_message`信号 → GameUI | `开始炼制`、`炼制完成` |
 | **GameUI** | 直接调用`log_manager.add_system_log()` | `欢迎消息`、`离线奖励` |
 
 ### 5.2 战斗消息输出方
 
 | 系统/模块 | 输出方式 | 典型日志 |
 |-----------|----------|----------|
-| **LianliSystem** | `lianli_action_log`信号 → LianliModule | `战斗开始...`、`造成伤害`、`通关第X层` |
+| **LianliSystem** | `log_message`信号 → LianliModule | `战斗开始...`、`造成伤害`、`挑战第X层成功` |
 | **LianliModule** | 判断类型后调用`add_system_log()`或`add_battle_log()` | 转发LianliSystem的日志 |
 
 ### 5.3 类型判断逻辑

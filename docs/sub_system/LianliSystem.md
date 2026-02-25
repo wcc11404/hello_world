@@ -658,7 +658,7 @@ signal battle_ended(victory: bool, loot: Array, enemy_name: String)       # 战�
 
 # 其他信号
 signal lianli_reward(item_id: String, amount: int, source: String)
-signal lianli_action_log(message: String)
+signal log_message(message: String)  # 历练日志信号
 ```
 
 **UI显示规则**：
@@ -673,7 +673,7 @@ signal lianli_action_log(message: String)
 - `battle_ended`: 单场战斗结束时
 - `lianli_ended`: 历练完全结束时
 - `lianli_waiting`: 连续历练等待期间（每帧更新）
-- `lianli_action_log`: 发生重要事件时
+- `log_message`: 发生重要事件时
 
 #### 10.4.3 UI层职责
 
