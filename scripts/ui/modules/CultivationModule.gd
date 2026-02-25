@@ -56,10 +56,10 @@ func initialize(ui: Node, player_node: Node, cult_sys: Node, lianli_sys: Node = 
 	_is_initialized = true
 	
 	# 连接修炼系统日志信号
-	if cultivation_system and cultivation_system.has_signal("cultivation_log"):
-		cultivation_system.cultivation_log.connect(_on_cultivation_log)
+	if cultivation_system:
+		cultivation_system.log_message.connect(_on_module_log)
 
-func _on_cultivation_log(message: String):
+func _on_module_log(message: String):
 	log_message.emit(message)
 
 # 显示修炼面板

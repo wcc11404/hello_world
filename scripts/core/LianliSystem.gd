@@ -13,7 +13,7 @@ signal battle_ended(victory: bool, loot: Array, enemy_name: String)  # 战斗结
 
 # 其他信号
 signal lianli_reward(item_id: String, amount: int, source: String)
-signal lianli_action_log(message: String)
+signal log_message(message: String)  # 历练日志信号
 
 # ATB战斗系统常量
 const ATB_MAX: float = 100.0
@@ -110,7 +110,7 @@ func start_lianli_in_area(area_id: String) -> bool:
 	# 检查玩家血量，小于等于0不能进入历练
 	if player and player.health <= 0:
 		var area_name = lianli_area_data.get_area_name(area_id) if lianli_area_data else "历练区域"
-		lianli_action_log.emit("气血不足，无法进入" + area_name)
+		log_message.emit("气血不足，无法进入" + area_name)
 		return false
 	
 	current_area_id = area_id
@@ -130,7 +130,7 @@ func start_endless_tower() -> bool:
 	# 检查玩家血量
 	if player and player.health <= 0:
 		var tower_name = endless_tower_data.get_tower_name() if endless_tower_data else "无尽塔"
-		lianli_action_log.emit("气血不足，无法进入" + tower_name)
+		log_message.emit("气血不足，无法进入" + tower_name)
 		return false
 	
 	# 设置无尽塔状态
@@ -308,11 +308,11 @@ func _trigger_start_spells():
 					"defense":
 						var buff_percent = effect_data.get("buff_percent", 0.0)
 						combat_buffs.defense_percent += buff_percent
-						lianli_action_log.emit("战斗开始，使用" + spell_name + "，" + log_effect)
+						log_message.emit("战斗开始，使用" + spell_name + "，" + log_effect)
 					"speed":
 						var buff_value = effect_data.get("buff_value", 0.0)
 						combat_buffs.speed_bonus += buff_value
-						lianli_action_log.emit("战斗开始，使用" + spell_name + "，" + log_effect)
+						log_message.emit("战斗开始，使用" + spell_name + "，" + log_effect)
 					"health":
 						var health_percent = effect_data.get("buff_percent", 0.0)
 						if player:
@@ -324,7 +324,7 @@ func _trigger_start_spells():
 							player.set_combat_buffs(combat_buffs)
 							# 增加当前气血（临时）
 							player.health += bonus_health
-						lianli_action_log.emit("战斗开始，使用" + spell_name + "，" + log_effect)
+						log_message.emit("战斗开始，使用" + spell_name + "，" + log_effect)
 		
 		# 增加使用次数
 		if not spell_id.is_empty():
@@ -453,13 +453,13 @@ func _execute_player_action():
 	
 	# 发送战斗日志
 	var enemy_name = current_enemy.get("name", "敌人")
-	var log_message = ""
+	var action_log = ""
 	var damage_str = AttributeCalculator.format_damage(damage_to_enemy)
 	if is_spell_damage:
-		log_message = "玩家使用" + spell_name + "对" + enemy_name + "造成了" + damage_str + "点伤害"
+		action_log = "玩家使用" + spell_name + "对" + enemy_name + "造成了" + damage_str + "点伤害"
 	else:
-		log_message = "玩家使用普通攻击对" + enemy_name + "造成了" + damage_str + "点伤害"
-	lianli_action_log.emit(log_message)
+		action_log = "玩家使用普通攻击对" + enemy_name + "造成了" + damage_str + "点伤害"
+	log_message.emit(action_log)
 	
 	# 发送行动执行信号
 	battle_action_executed.emit(true, damage_to_enemy, is_spell_damage, spell_name)
@@ -488,7 +488,7 @@ func _execute_enemy_action():
 	# 发送战斗日志
 	var enemy_name = current_enemy.get("name", "敌人")
 	var damage_str = AttributeCalculator.format_damage(damage_to_player)
-	lianli_action_log.emit(enemy_name + "对玩家造成了" + damage_str + "点伤害")
+	log_message.emit(enemy_name + "对玩家造成了" + damage_str + "点伤害")
 	
 	# 发送行动执行信号
 	battle_action_executed.emit(false, damage_to_player, false, "")
@@ -556,7 +556,7 @@ func _handle_battle_victory():
 	if lianli_area_data and lianli_area_data.is_single_boss_area(current_area_id):
 		is_in_battle = false
 		is_in_lianli = false
-		lianli_action_log.emit("通关成功！")
+		log_message.emit("通关成功！")
 		end_lianli()
 		return
 	
@@ -577,7 +577,7 @@ func _handle_battle_defeat():
 	is_in_lianli = false
 	# 恢复气血buff
 	_restore_health_after_combat()
-	lianli_action_log.emit("气血不足，历练结束")
+	log_message.emit("气血不足，历练结束")
 	battle_ended.emit(false, [], current_enemy.get("name", ""))
 	end_lianli()
 
@@ -594,12 +594,12 @@ func _handle_tower_victory():
 			var amount = reward[item_id]
 			lianli_reward.emit(item_id, amount, "tower")
 	
-	lianli_action_log.emit("通关第" + str(current_tower_floor) + "层")
+	log_message.emit("挑战第" + str(current_tower_floor) + "层成功")
 	
 	# 检查是否达到上限
 	var max_floor = endless_tower_data.get_max_floor()
 	if current_tower_floor >= max_floor:
-		lianli_action_log.emit("恭喜！已通关无尽塔最高层！")
+		log_message.emit("恭喜！已通关无尽塔最高层！")
 		is_in_battle = false
 		is_in_lianli = false
 		is_in_tower = false
@@ -617,7 +617,7 @@ func _handle_tower_defeat():
 	is_in_tower = false
 	# 恢复气血buff
 	_restore_health_after_combat()
-	lianli_action_log.emit("无尽塔挑战结束，最高到达第" + str(current_tower_floor) + "层")
+	log_message.emit("无尽塔挑战结束，最高到达第" + str(current_tower_floor) + "层")
 	battle_ended.emit(false, [], current_enemy.get("name", ""))
 	end_lianli()
 
@@ -660,7 +660,7 @@ func exit_tower():
 		is_in_lianli = false
 		is_in_battle = false
 		is_waiting = false
-		lianli_action_log.emit("退出无尽塔，最高到达第" + str(current_tower_floor) + "层")
+		log_message.emit("退出无尽塔，最高到达第" + str(current_tower_floor) + "层")
 		end_lianli()
 
 # 获取术法系统（带缓存）

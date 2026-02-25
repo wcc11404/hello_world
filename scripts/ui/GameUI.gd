@@ -339,6 +339,9 @@ func setup_alchemy_module():
 		count_100_button.pressed.connect(func(): _on_craft_count_changed(100))
 	if count_max_button:
 		count_max_button.pressed.connect(_on_craft_count_max)
+	
+	# 连接信号
+	alchemy_module.log_message.connect(_on_module_log)
 
 func setup_settings_module():
 	# 创建设置模块
@@ -353,6 +356,9 @@ func setup_settings_module():
 	
 	# 初始化模块
 	settings_module.initialize(self, player, null)
+	
+	# 连接信号
+	settings_module.log_message.connect(_on_module_log)
 
 func setup_dongfu_module():
 	# 创建洞府模块
@@ -386,6 +392,9 @@ func setup_chuna_module():
 	
 	# 初始化模块
 	chuna_module.initialize(self, player, inventory, item_data_ref, spell_system, spell_data_ref)
+	
+	# 连接信号
+	chuna_module.log_message.connect(_on_module_log)
 
 func setup_spell_module():
 	spell_module = SpellModule.new()
@@ -398,6 +407,9 @@ func setup_spell_module():
 	
 	# 初始化模块
 	spell_module.initialize(self, player, spell_system, spell_data_ref)
+	
+	# 连接信号
+	spell_module.log_message.connect(_on_module_log)
 
 func setup_neishi_module():
 	# 创建修炼突破模块
@@ -434,7 +446,7 @@ func setup_neishi_module():
 	cultivation_module.initialize(self, player, cult_system, lianli_sys, item_data_ref)
 	
 	# 连接信号
-	cultivation_module.log_message.connect(_on_cultivation_module_log)
+	cultivation_module.log_message.connect(_on_module_log)
 	
 	# 创建内视模块
 	neishi_module = NeishiModule.new()
@@ -458,13 +470,10 @@ func setup_neishi_module():
 	neishi_module.set_spell_module(spell_module)
 	
 	# 连接信号
-	neishi_module.log_message.connect(_on_neishi_module_log)
+	neishi_module.log_message.connect(_on_module_log)
 
-func _on_cultivation_module_log(message: String):
-	if log_manager:
-		log_manager.add_system_log(message)
-
-func _on_neishi_module_log(message: String):
+func _on_module_log(message: String):
+	"""统一处理各模块的日志消息"""
 	if log_manager:
 		log_manager.add_system_log(message)
 
@@ -499,11 +508,7 @@ func setup_lianli_module():
 	lianli_module.initialize(self, player, lianli_system, lianli_area_data, endless_tower_data, item_data_ref, inventory, chuna_module, log_manager)
 	
 	# 连接信号
-	lianli_module.log_message.connect(_on_lianli_module_log)
-
-func _on_lianli_module_log(message: String):
-	if log_manager:
-		log_manager.add_system_log(message)
+	lianli_module.log_message.connect(_on_module_log)
 
 func load_game_data():
 	var game_manager = get_node("/root/GameManager")
@@ -555,34 +560,19 @@ func load_game_data():
 func connect_lianli_signals(battle_sys: Node):
 	if battle_sys and not lianli_signals_connected and lianli_module:
 		# 历练相关信号 -> LianliModule
-		if battle_sys.has_signal("lianli_started"):
-			battle_sys.lianli_started.connect(lianli_module.on_lianli_started)
-		if battle_sys.has_signal("lianli_ended"):
-			battle_sys.lianli_ended.connect(lianli_module.on_lianli_ended)
-			# 同时连接GameUI的处理，用于更新无尽塔按钮
-			battle_sys.lianli_ended.connect(_on_lianli_ended_update_tower_button)
-		if battle_sys.has_signal("lianli_waiting"):
-			battle_sys.lianli_waiting.connect(lianli_module.on_lianli_waiting)
-		if battle_sys.has_signal("lianli_action_log"):
-			battle_sys.lianli_action_log.connect(lianli_module.on_lianli_action_log)
-		if battle_sys.has_signal("lianli_reward"):
-			battle_sys.lianli_reward.connect(lianli_module.on_lianli_reward)
+		battle_sys.lianli_started.connect(lianli_module.on_lianli_started)
+		battle_sys.lianli_ended.connect(lianli_module.on_lianli_ended)
+		# 同时连接GameUI的处理，用于更新无尽塔按钮
+		battle_sys.lianli_ended.connect(_on_lianli_ended_update_tower_button)
+		battle_sys.lianli_waiting.connect(lianli_module.on_lianli_waiting)
+		battle_sys.log_message.connect(lianli_module.on_lianli_action_log)
+		battle_sys.lianli_reward.connect(lianli_module.on_lianli_reward)
 		
 		# 战斗相关信号 -> LianliModule
-		if battle_sys.has_signal("battle_started"):
-			battle_sys.battle_started.connect(lianli_module.on_battle_started)
-		if battle_sys.has_signal("battle_updated"):
-			battle_sys.battle_updated.connect(lianli_module.on_battle_updated)
-		if battle_sys.has_signal("battle_ended"):
-			battle_sys.battle_ended.connect(lianli_module.on_battle_ended)
-		if battle_sys.has_signal("battle_action_executed"):
-			battle_sys.battle_action_executed.connect(lianli_module.on_battle_action_executed)
-		
-		# 兼容旧信号 -> LianliModule
-		if battle_sys.has_signal("lianli_round"):
-			battle_sys.lianli_round.connect(lianli_module.on_lianli_round)
-		if battle_sys.has_signal("lianli_win"):
-			battle_sys.lianli_win.connect(lianli_module.on_lianli_win)
+		battle_sys.battle_started.connect(lianli_module.on_battle_started)
+		battle_sys.battle_updated.connect(lianli_module.on_battle_updated)
+		battle_sys.battle_ended.connect(lianli_module.on_battle_ended)
+		battle_sys.battle_action_executed.connect(lianli_module.on_battle_action_executed)
 		
 		lianli_signals_connected = true
 

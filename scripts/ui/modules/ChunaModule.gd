@@ -7,6 +7,7 @@ signal item_selected(item_id: String, index: int)
 signal item_used(item_id: String)
 signal item_discarded(item_id: String, count: int)
 signal inventory_updated
+signal log_message(message: String)  # 日志消息信号
 
 # 引用
 var game_ui: Node = null
@@ -485,12 +486,12 @@ func _on_use_button_pressed():
 					var result = spell_system.obtain_spell(spell_id)
 					if result:
 						var spell_name = spell_data.get_spell_name(spell_id) if spell_data else spell_id
-						_add_log("使用" + item_name + "，成功解锁术法：" + spell_name + "！")
+						_add_log("使用" + item_name + "，成功解锁术法")
 						# 通知GameUI刷新术法UI
 						if game_ui and game_ui.has_method("_init_spell_ui"):
 							game_ui._init_spell_ui()
 					else:
-						_add_log("该术法已解锁！")
+						_add_log("该术法已解锁")
 						return
 				else:
 					_add_log("术法系统未初始化，无法使用")
@@ -579,12 +580,12 @@ func _on_expand_button_pressed():
 	
 	var current_slots = inventory_grid.get_child_count() if inventory_grid else 0
 	if current_slots >= MAX_SLOTS:
-		_add_log("背包已达到最大容量 (" + str(MAX_SLOTS) + " 格)")
+		_add_log("纳戒储纳已达到上限 (" + str(MAX_SLOTS) + " 格)")
 		return
 	
 	if inventory.has_method("expand_capacity") and inventory.expand_capacity():
 		var new_capacity = min(inventory.get_capacity(), MAX_SLOTS)
-		_add_log("背包已扩展至 " + str(new_capacity) + " 格")
+		_add_log("纳戒储纳上限已扩容至 " + str(new_capacity) + " 格")
 		
 		# 添加新的格子而不是重新创建所有格子
 		for i in range(current_slots, new_capacity):
@@ -606,14 +607,11 @@ func _on_sort_button_pressed():
 		inventory.sort_by_id()
 		_clear_item_detail_panel()
 		update_inventory_ui()
-		_add_log("背包已整理")
+		_add_log("纳戒已整理")
 
-# 辅助函数：添加日志
+# 辅助函数：添加日志（通过信号）
 func _add_log(message: String):
-	if game_ui and game_ui.log_manager:
-		game_ui.log_manager.add_system_log(message)
-	else:
-		print("[ChunaModule] " + message)
+	log_message.emit(message)
 
 # 公共接口
 ## 获取当前选中的物品ID

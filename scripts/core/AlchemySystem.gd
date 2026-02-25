@@ -6,7 +6,7 @@ class_name AlchemySystem extends Node
 signal recipe_learned(recipe_id: String)
 signal crafting_started(recipe_id: String, count: int)
 signal crafting_finished(recipe_id: String, success_count: int, fail_count: int)
-signal crafting_log(message: String)
+signal log_message(message: String)  # 炼丹日志信号
 
 # 引用
 var player: Node = null
@@ -205,7 +205,7 @@ func start_crafting(recipe_id: String, count: int) -> Dictionary:
 	current_craft_progress = 0.0
 	
 	crafting_started.emit(recipe_id, count)
-	crafting_log.emit("开始炼制 " + recipe_data.get_recipe_name(recipe_id) + " ×" + str(count))
+	log_message.emit("开始炼制 " + recipe_data.get_recipe_name(recipe_id) + " ×" + str(count))
 	
 	# 执行炼制（立即完成，实际游戏中可以加入延时）
 	_perform_crafting()
@@ -250,9 +250,9 @@ func _perform_crafting():
 	
 	# 发送日志
 	var recipe_name = recipe_data.get_recipe_name(current_craft_recipe)
-	crafting_log.emit("炼制完成！获得 " + recipe_name + " ×" + str(success_count))
+	log_message.emit("炼制完成！获得 " + recipe_name + " ×" + str(success_count))
 	if fail_count > 0:
-		crafting_log.emit("炼制失败 " + str(fail_count) + " 次，返还一半材料")
+		log_message.emit("炼制失败 " + str(fail_count) + " 次，返还一半材料")
 	
 	# 结束炼制
 	is_crafting = false

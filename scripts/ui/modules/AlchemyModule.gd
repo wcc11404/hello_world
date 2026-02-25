@@ -6,7 +6,7 @@ class_name AlchemyModule extends Node
 signal recipe_selected(recipe_id: String)
 signal crafting_started(recipe_id: String, count: int)
 signal crafting_finished(success_count: int, fail_count: int)
-signal crafting_log(message: String)
+signal log_message(message: String)  # 炼丹日志信号
 signal back_to_dongfu_requested
 
 # 引用
@@ -247,7 +247,7 @@ func _add_log(message: String):
 	if log_label:
 		var time_str = Time.get_time_string_from_system()
 		log_label.text += "[%s] %s\n" % [time_str, message]
-		crafting_log.emit(message)
+		log_message.emit(message)
 
 # 清空日志
 func clear_log():
