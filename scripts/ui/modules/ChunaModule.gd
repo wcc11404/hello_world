@@ -177,7 +177,7 @@ func _create_slot(index: int) -> Control:
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	name_label.set_anchors_preset(Control.PRESET_FULL_RECT)
-	name_label.add_theme_font_size_override("font_size", 20)
+	name_label.add_theme_font_size_override("font_size", 22)
 	name_label.add_theme_color_override("font_color", Color(0.2, 0.2, 0.2, 1))
 	name_label.autowrap_mode = TextServer.AUTOWRAP_WORD
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -366,27 +366,21 @@ func _show_item_detail(index: int):
 		if detail_stats:
 			detail_stats.visible = false
 	
-	# 按钮可见性控制
-	if view_button:
-		view_button.visible = true
+	# 按钮可见性控制（根据新的物品类型系统）
+	# 查看按钮已移除，详情直接显示在面板中
 	
-	# 根据物品属性决定按钮显示
-	var content = item_info.get("content", {})
-	var effect = item_info.get("effect", {})
-	var has_content = not content.is_empty()
-	var has_effect = not effect.is_empty()
+	# 根据物品类型决定功能按钮显示
+	var item_type = item_data.get_item_type(item_id) if item_data else 1
+	var has_func = item_data.has_function(item_id) if item_data else false
 	
-	if has_content or has_effect:
-		if use_button:
-			use_button.visible = true
-			if has_content:
-				use_button.text = "打开"
-			elif has_effect:
-				use_button.text = "使用"
+	if has_func and use_button:
+		use_button.visible = true
+		use_button.text = item_data.get_function_button_text(item_id) if item_data else "使用"
 	else:
 		if use_button:
 			use_button.visible = false
 	
+	# 丢弃按钮始终显示
 	if discard_button:
 		discard_button.visible = true
 	
@@ -533,6 +527,39 @@ func _on_use_button_pressed():
 
 func _on_discard_button_pressed():
 	if current_selected_item_id.is_empty() or current_selected_index < 0:
+		return
+	
+	var item_info = item_data.get_item_data(current_selected_item_id) if item_data else {}
+	var item_name = item_info.get("name", "未知")
+	
+	# 检查是否为重要物品（需要二次确认）
+	if item_data and item_data.is_important(current_selected_item_id):
+		_show_discard_confirm_dialog(item_name)
+	else:
+		# 直接丢弃
+		_perform_discard()
+
+# 显示丢弃确认对话框
+func _show_discard_confirm_dialog(item_name: String):
+	var dialog = AcceptDialog.new()
+	dialog.title = "确认丢弃"
+	dialog.dialog_text = "确定要丢弃 " + item_name + " 吗？\n\n（此物品为重要物品，丢弃后无法找回）"
+	dialog.ok_button_text = "确定"
+	# 取消按钮使用默认文本
+	dialog.confirmed.connect(_on_discard_confirmed)
+	dialog.canceled.connect(_on_discard_cancelled)
+	add_child(dialog)
+	dialog.popup_centered()
+
+func _on_discard_confirmed():
+	_perform_discard()
+
+func _on_discard_cancelled():
+	_add_log("取消丢弃")
+
+# 执行丢弃操作
+func _perform_discard():
+	if current_selected_item_id.is_empty():
 		return
 	
 	var item_info = item_data.get_item_data(current_selected_item_id) if item_data else {}
