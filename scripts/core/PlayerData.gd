@@ -219,12 +219,6 @@ func get_spirit_gain_speed() -> float:
 		return realm_system.get_spirit_gain_speed(realm)
 	return 1.0
 
-func start_cultivation():
-	cultivation_active = true
-
-func stop_cultivation():
-	cultivation_active = false
-
 func add_spirit_energy(amount: float):
 	# 如果当前灵气已满，不增加
 	if spirit_energy >= get_final_max_spirit_energy():

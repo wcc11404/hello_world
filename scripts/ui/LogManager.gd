@@ -8,7 +8,7 @@ enum LogType {
 }
 
 var log_messages: Array = []
-var max_log_count: int = 50
+var max_log_count: int = 500
 
 var rich_text_label: RichTextLabel = null
 

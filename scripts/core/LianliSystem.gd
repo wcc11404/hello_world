@@ -266,6 +266,7 @@ func end_lianli():
 	_restore_health_after_combat()
 	_reset_combat_buffs()
 	_cached_spell_system = null  # 清除缓存
+	lianli_action_log.emit("已退出历练区域")
 	lianli_ended.emit(false)
 
 # 结束当前战斗

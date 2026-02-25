@@ -133,6 +133,7 @@ func start_lianli_in_area(area_id: String):
 		log_message.emit("历练开始失败")
 
 # 停止修炼（辅助函数）
+# 注意：日志由CultivationSystem.stop_cultivation()输出
 func _stop_cultivation():
 	if not player:
 		return
@@ -140,10 +141,8 @@ func _stop_cultivation():
 	if player.get_is_cultivating():
 		var game_manager = get_node_or_null("/root/GameManager")
 		var cult_system = game_manager.get_cultivation_system() if game_manager else null
-		player.stop_cultivation()
 		if cult_system:
 			cult_system.stop_cultivation()
-		log_message.emit("已停止修炼")
 
 # ==================== 无尽塔功能 ====================
 
