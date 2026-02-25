@@ -54,6 +54,13 @@ func initialize(ui: Node, player_node: Node, cult_sys: Node, lianli_sys: Node = 
 	lianli_system = lianli_sys
 	item_data = item_data_ref
 	_is_initialized = true
+	
+	# 连接修炼系统日志信号
+	if cultivation_system:
+		cultivation_system.log_message.connect(_on_module_log)
+
+func _on_module_log(message: String):
+	log_message.emit(message)
 
 # 显示修炼面板
 func show_panel():
@@ -85,23 +92,20 @@ func on_cultivate_button_pressed():
 		return
 	
 	if player.get_is_cultivating():
-		# 停止修炼
-		player.stop_cultivation()
+		# 停止修炼（日志由CultivationSystem.stop_cultivation()输出）
 		cultivation_system.stop_cultivation()
 		cultivate_button.text = "修炼"
-		log_message.emit("停止修炼")
 		cultivation_stopped.emit()
 	else:
 		# 如果正在历练或等待中，先停止历练
 		if lianli_system and (lianli_system.is_in_lianli or lianli_system.is_waiting):
 			lianli_system.end_lianli()
-			log_message.emit("已退出历练区域，停止历练")
+			log_message.emit("已退出历练区域")
 			# 通知GameUI切换回内视页面
 			if game_ui and game_ui.has_method("show_neishi_tab"):
 				game_ui.show_neishi_tab()
 		
 		# 开始修炼
-		player.start_cultivation()
 		cultivation_system.start_cultivation()
 		cultivate_button.text = "停止修炼"
 		log_message.emit("开始修炼，灵气积累中...")

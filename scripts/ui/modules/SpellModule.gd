@@ -7,6 +7,7 @@ signal spell_equipped(spell_id: String)
 signal spell_unequipped(spell_id: String)
 signal spell_upgraded(spell_id: String)
 signal spell_viewed(spell_id: String)
+signal log_message(message: String)  # 日志消息信号
 
 # 引用
 var game_ui: Node = null
@@ -561,9 +562,8 @@ func _format_effect_description(description: String, effect: Dictionary) -> Stri
 	return result
 
 func _add_log(message: String):
-	"""添加日志"""
-	if game_ui and game_ui.has_method("add_log"):
-		game_ui.add_log(message)
+	"""添加日志（通过信号）"""
+	log_message.emit(message)
 
 # 公共接口
 ## 获取当前查看的术法ID

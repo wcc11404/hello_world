@@ -2,6 +2,7 @@ class_name CultivationSystem extends Node
 
 signal cultivation_progress(current: int, max: int)
 signal cultivation_complete()
+signal log_message(message: String)  # 修炼日志信号
 
 var is_cultivating: bool = false
 var cultivation_timer: float = 0.0
@@ -27,6 +28,7 @@ func stop_cultivation():
 	is_cultivating = false
 	if player:
 		player.cultivation_active = false
+	log_message.emit("停止修炼")
 
 func _process(delta: float):
 	if not is_cultivating or not player:

@@ -1,5 +1,23 @@
 extends Node
 
+# 物品类型枚举
+enum ItemType {
+	CURRENCY = 0,      # 货币类（灵石）
+	MATERIAL = 1,      # 材料类（灵草、矿石）
+	CONSUMABLE = 2,    # 消耗品类（丹药）
+	GIFT = 3,          # 礼包类
+	UNLOCK = 4         # 功能解锁类（术法、丹方）
+}
+
+# 品质颜色
+const QUALITY_COLORS: Array = [
+	Color("#D3D3D3"),     # 普通 - 更浅灰色 (LightGray)
+	Color.GREEN,          # 优秀 - 绿色
+	Color("#00BFFF"),     # 精良 - 亮蓝色 (DeepSkyBlue)
+	Color("#EE82EE"),     # 史诗 - 更亮紫色 (Violet)
+	Color.ORANGE          # 传说 - 橙色
+]
+
 var item_data: Dictionary = {
 	"spirit_stone": {
 		"id": "spirit_stone",
@@ -23,9 +41,9 @@ var item_data: Dictionary = {
 		"id": "mat_herb",
 		"name": "灵草",
 		"type": 1,
-		"quality": 1,
+		"quality": 0,
 		"max_stack": 99,
-		"description": "用于装备强化的珍稀草药",
+		"description": "用于炼丹的基础草药，具有广泛药用用途",
 		"icon": "res://assets/items/mat_herb.png"
 	},
 	"mat_crystal": {
@@ -99,7 +117,7 @@ var item_data: Dictionary = {
 	"spell_basic_breathing": {
 		"id": "spell_basic_breathing",
 		"name": "基础吐纳",
-		"type": 3,
+		"type": 4,
 		"quality": 0,
 		"max_stack": 99,
 		"description": "使用后可解锁基础吐纳术法",
@@ -112,7 +130,7 @@ var item_data: Dictionary = {
 	"spell_basic_boxing_techniques": {
 		"id": "spell_basic_boxing_techniques",
 		"name": "基础拳法",
-		"type": 3,
+		"type": 4,
 		"quality": 0,
 		"max_stack": 99,
 		"description": "使用后可解锁基础拳法术法",
@@ -125,7 +143,7 @@ var item_data: Dictionary = {
 	"spell_thunder_strike": {
 		"id": "spell_thunder_strike",
 		"name": "雷击术",
-		"type": 3,
+		"type": 4,
 		"quality": 1,
 		"max_stack": 99,
 		"description": "使用后可解锁雷击术",
@@ -138,7 +156,7 @@ var item_data: Dictionary = {
 	"spell_basic_defense": {
 		"id": "spell_basic_defense",
 		"name": "基础防御",
-		"type": 3,
+		"type": 4,
 		"quality": 0,
 		"max_stack": 99,
 		"description": "使用后可解锁基础防御术法",
@@ -151,7 +169,7 @@ var item_data: Dictionary = {
 	"spell_basic_steps": {
 		"id": "spell_basic_steps",
 		"name": "基础步法",
-		"type": 3,
+		"type": 4,
 		"quality": 0,
 		"max_stack": 99,
 		"description": "使用后可解锁基础步法术法",
@@ -164,7 +182,7 @@ var item_data: Dictionary = {
 	"spell_basic_health": {
 		"id": "spell_basic_health",
 		"name": "基础气血",
-		"type": 3,
+		"type": 4,
 		"quality": 0,
 		"max_stack": 99,
 		"description": "使用后可解锁基础气血术法",
@@ -177,8 +195,8 @@ var item_data: Dictionary = {
 	"foundation_pill": {
 		"id": "foundation_pill",
 		"name": "筑基丹",
-		"type": 1,
-		"quality": 2,
+		"type": 2,
+		"quality": 1,
 		"max_stack": 99,
 		"description": "用于炼气期突破到筑基期的珍贵丹药",
 		"icon": "res://assets/items/foundation_pill.png"
@@ -186,8 +204,8 @@ var item_data: Dictionary = {
 	"golden_core_pill": {
 		"id": "golden_core_pill",
 		"name": "金丹丹",
-		"type": 1,
-		"quality": 3,
+		"type": 2,
+		"quality": 2,
 		"max_stack": 99,
 		"description": "用于筑基期突破到金丹期的必备丹药",
 		"icon": "res://assets/items/foundation_pill.png"
@@ -195,8 +213,8 @@ var item_data: Dictionary = {
 	"nascent_soul_pill": {
 		"id": "nascent_soul_pill",
 		"name": "元婴丹",
-		"type": 1,
-		"quality": 3,
+		"type": 2,
+		"quality": 2,
 		"max_stack": 99,
 		"description": "用于金丹期突破到元婴期的必备丹药",
 		"icon": "res://assets/items/foundation_pill.png"
@@ -204,8 +222,8 @@ var item_data: Dictionary = {
 	"spirit_separation_pill": {
 		"id": "spirit_separation_pill",
 		"name": "化神丹",
-		"type": 1,
-		"quality": 4,
+		"type": 2,
+		"quality": 3,
 		"max_stack": 99,
 		"description": "用于元婴期突破到化神期的必备丹药",
 		"icon": "res://assets/items/foundation_pill.png"
@@ -213,8 +231,8 @@ var item_data: Dictionary = {
 	"void_refining_pill": {
 		"id": "void_refining_pill",
 		"name": "炼虚丹",
-		"type": 1,
-		"quality": 4,
+		"type": 2,
+		"quality": 3,
 		"max_stack": 99,
 		"description": "用于化神期突破到炼虚期的必备丹药",
 		"icon": "res://assets/items/foundation_pill.png"
@@ -222,7 +240,7 @@ var item_data: Dictionary = {
 	"body_integration_pill": {
 		"id": "body_integration_pill",
 		"name": "合体丹",
-		"type": 1,
+		"type": 2,
 		"quality": 4,
 		"max_stack": 99,
 		"description": "用于炼虚期突破到合体期的必备丹药",
@@ -231,7 +249,7 @@ var item_data: Dictionary = {
 	"mahayana_pill": {
 		"id": "mahayana_pill",
 		"name": "大乘丹",
-		"type": 1,
+		"type": 2,
 		"quality": 4,
 		"max_stack": 99,
 		"description": "用于合体期突破到大乘期的必备丹药",
@@ -240,7 +258,7 @@ var item_data: Dictionary = {
 	"tribulation_pill": {
 		"id": "tribulation_pill",
 		"name": "渡劫丹",
-		"type": 1,
+		"type": 2,
 		"quality": 4,
 		"max_stack": 99,
 		"description": "用于大乘期突破到渡劫期的必备丹药",
@@ -275,8 +293,8 @@ var item_data: Dictionary = {
 	"recipe_foundation_pill": {
 		"id": "recipe_foundation_pill",
 		"name": "筑基丹丹方",
-		"type": 3,
-		"quality": 2,
+		"type": 4,
+		"quality": 1,
 		"max_stack": 99,
 		"description": "记载筑基丹炼制方法的珍贵丹方，使用后学会炼制筑基丹",
 		"icon": "res://assets/items/foundation_pill.png",
@@ -288,8 +306,8 @@ var item_data: Dictionary = {
 	"recipe_golden_core_pill": {
 		"id": "recipe_golden_core_pill",
 		"name": "金丹丹丹方",
-		"type": 3,
-		"quality": 3,
+		"type": 4,
+		"quality": 2,
 		"max_stack": 99,
 		"description": "记载金丹丹炼制方法的稀有丹方，使用后学会炼制金丹丹",
 		"icon": "res://assets/items/foundation_pill.png",
@@ -301,11 +319,15 @@ var item_data: Dictionary = {
 	"alchemy_furnace": {
 		"id": "alchemy_furnace",
 		"name": "初级丹炉",
-		"type": 1,
-		"quality": 2,
+		"type": 4,
+		"quality": 1,
 		"max_stack": 1,
-		"description": "炼丹的基础工具，可提升炼丹成功率和速度",
-		"icon": "res://assets/items/mat_crystal.png"
+		"description": "炼丹的基础工具，使用后可解锁炼丹功能",
+		"icon": "res://assets/items/mat_crystal.png",
+		"effect": {
+			"type": "unlock_feature",
+			"feature_id": "alchemy"
+		}
 	},
 	"starter_pack": {
 		"id": "starter_pack",
@@ -352,14 +374,6 @@ var item_data: Dictionary = {
 	}
 }
 
-const QUALITY_COLORS: Array = [
-	Color.GRAY,
-	Color.GREEN,
-	Color.DODGER_BLUE,
-	Color.MAGENTA,
-	Color.ORANGE
-]
-
 func _ready():
 	pass
 
@@ -382,3 +396,53 @@ func can_stack(item_id: String) -> bool:
 func get_max_stack(item_id: String) -> int:
 	var data = get_item_data(item_id)
 	return data.get("max_stack", 1)
+
+# 获取物品类型
+func get_item_type(item_id: String) -> int:
+	var data = get_item_data(item_id)
+	return data.get("type", ItemType.MATERIAL)
+
+# 判断是否为礼包类
+func is_gift(item_id: String) -> bool:
+	return get_item_type(item_id) == ItemType.GIFT
+
+# 判断是否为消耗品类
+func is_consumable(item_id: String) -> bool:
+	return get_item_type(item_id) == ItemType.CONSUMABLE
+
+# 判断是否为功能解锁类
+func is_unlock(item_id: String) -> bool:
+	return get_item_type(item_id) == ItemType.UNLOCK
+
+# 判断是否为货币类
+func is_currency(item_id: String) -> bool:
+	return get_item_type(item_id) == ItemType.CURRENCY
+
+# 判断是否为材料类
+func is_material(item_id: String) -> bool:
+	return get_item_type(item_id) == ItemType.MATERIAL
+
+# 判断物品是否有使用/打开功能
+func has_function(item_id: String) -> bool:
+	var data = get_item_data(item_id)
+	var item_type = data.get("type", ItemType.MATERIAL)
+	return item_type == ItemType.GIFT or item_type == ItemType.CONSUMABLE or item_type == ItemType.UNLOCK
+
+# 获取功能按钮文本
+func get_function_button_text(item_id: String) -> String:
+	var item_type = get_item_type(item_id)
+	match item_type:
+		ItemType.GIFT:
+			return "打开"
+		ItemType.CONSUMABLE, ItemType.UNLOCK:
+			return "使用"
+		_:
+			return ""
+
+# 判断是否为重要物品（需要二次确认）
+func is_important(item_id: String) -> bool:
+	var data = get_item_data(item_id)
+	var quality = data.get("quality", 0)
+	var item_type = data.get("type", ItemType.MATERIAL)
+	# 传说品质或功能解锁类为重要物品
+	return quality >= 4 or item_type == ItemType.UNLOCK

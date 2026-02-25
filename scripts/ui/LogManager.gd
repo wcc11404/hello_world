@@ -8,7 +8,7 @@ enum LogType {
 }
 
 var log_messages: Array = []
-var max_log_count: int = 50
+var max_log_count: int = 500
 
 var rich_text_label: RichTextLabel = null
 
@@ -26,19 +26,6 @@ func add_system_log(message: String):
 # 添加战斗消息
 func add_battle_log(message: String):
 	_add_log_internal(message, LogType.BATTLE)
-
-func add_log(message: String):
-	# 根据消息内容自动判断类型
-	var log_type = _detect_log_type(message)
-	_add_log_internal(message, log_type)
-
-func _detect_log_type(message: String) -> LogType:
-	# 战斗消息关键词
-	var battle_keywords = ["遭遇", "攻击", "伤害", "历练成功", "历练失败", "通关", "敌人"]
-	for keyword in battle_keywords:
-		if keyword in message:
-			return LogType.BATTLE
-	return LogType.SYSTEM
 
 func _add_log_internal(message: String, log_type: LogType):
 	var timestamp = _get_timestamp()
@@ -78,23 +65,21 @@ func _get_type_tag(log_type: LogType) -> String:
 func _format_message(message: String, log_type: LogType) -> String:
 	var result = message
 	
-	# 系统消息高亮
+	# 系统消息高亮（使用柔和的颜色）
 	if log_type == LogType.SYSTEM:
 		if "灵石" in result:
-			result = _highlight_reward(result, "灵石", "gold")
+			result = _highlight_reward(result, "灵石", "#B8860B")  # 深金色
 		if "灵气" in result:
-			result = _highlight_reward(result, "灵气", "cyan")
-		result = result.replace("成功", "[color=green]成功[/color]")
-		result = result.replace("失败", "[color=red]失败[/color]")
-		result = result.replace("离线总计时间", "[color=yellow]离线总计时间[/color]")
-		result = result.replace("获得奖励", "[color=yellow]获得奖励[/color]")
-	# 战斗消息高亮
+			result = _highlight_reward(result, "灵气", "#5F9EA0")  # 柔和青色
+		result = result.replace("成功", "[color=#6B8E23]成功[/color]")  # 柔和绿色
+		result = result.replace("失败", "[color=#CD5C5C]失败[/color]")  # 柔和红色
+		result = result.replace("离线总计时间", "[color=#B8860B]离线总计时间[/color]")  # 深金色
+	# 战斗消息高亮（使用柔和的颜色）
 	else:
-		result = result.replace("造成了", "[color=red]造成了[/color]")
-		result = result.replace("点伤害", "[color=red]点伤害[/color]")
-		result = result.replace("历练成功", "[color=green]历练成功[/color]")
-		result = result.replace("历练失败", "[color=red]历练失败[/color]")
-		result = result.replace("通关", "[color=green]通关[/color]")
+		result = result.replace("造成了", "[color=#CD5C5C]造成了[/color]")  # 柔和红色
+		result = result.replace("点伤害", "[color=#CD5C5C]点伤害[/color]")  # 柔和红色
+		result = result.replace("成功", "[color=#6B8E23]成功[/color]")  # 柔和绿色
+		result = result.replace("失败", "[color=#CD5C5C]失败[/color]")  # 柔和红色
 	
 	return result
 

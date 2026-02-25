@@ -133,6 +133,7 @@ func start_lianli_in_area(area_id: String):
 		log_message.emit("历练开始失败")
 
 # 停止修炼（辅助函数）
+# 注意：日志由CultivationSystem.stop_cultivation()输出
 func _stop_cultivation():
 	if not player:
 		return
@@ -140,10 +141,8 @@ func _stop_cultivation():
 	if player.get_is_cultivating():
 		var game_manager = get_node_or_null("/root/GameManager")
 		var cult_system = game_manager.get_cultivation_system() if game_manager else null
-		player.stop_cultivation()
 		if cult_system:
 			cult_system.stop_cultivation()
-		log_message.emit("已停止修炼")
 
 # ==================== 无尽塔功能 ====================
 
@@ -239,6 +238,7 @@ func on_lianli_speed_pressed():
 func on_exit_lianli_pressed():
 	if lianli_system:
 		lianli_system.end_lianli()
+		log_message.emit("已退出历练区域")
 	show_lianli_select_panel()
 
 # 启用继续战斗按钮
@@ -529,20 +529,6 @@ func on_lianli_reward(item_id: String, amount: int, source: String):
 		if chuna_module:
 			chuna_module.update_inventory_ui()
 
-# 历练失败
-func on_lianli_lose():
-	if lianli_status_label:
-		lianli_status_label.text = "历练失败..."
-		lianli_status_label.modulate = Color.RED
-	
-	var log_msg = "历练失败，已自动退出历练区域"
-	if log_manager:
-		log_manager.add_battle_log(log_msg)
-	else:
-		log_message.emit(log_msg)
-	
-	show_lianli_select_panel()
-
 # 等待中
 func on_lianli_waiting(time_remaining: float):
 	if lianli_status_label:
@@ -551,10 +537,21 @@ func on_lianli_waiting(time_remaining: float):
 	
 	lianli_waiting.emit(time_remaining)
 
-# 战斗日志
+# 战斗日志（根据内容判断类型）
 func on_lianli_action_log(message: String):
+	# 系统消息关键词
+	var system_keywords = ["气血不足", "无法进入"]
+	var is_system = false
+	for keyword in system_keywords:
+		if keyword in message:
+			is_system = true
+			break
+	
 	if log_manager:
-		log_manager.add_battle_log(message)
+		if is_system:
+			log_manager.add_system_log(message)
+		else:
+			log_manager.add_battle_log(message)
 	else:
 		log_message.emit(message)
 	

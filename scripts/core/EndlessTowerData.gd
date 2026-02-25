@@ -8,16 +8,16 @@ const TOWER_CONFIG = {
 	"templates": ["wolf", "snake", "boar"],  # 随机选择的模板
 	"reward_floors": [5, 10, 15, 20, 25, 30, 35, 40, 45, 50],
 	"rewards": {
-		5: {"spirit_stone": 10, "health_pill": 1},
-		10: {"spirit_stone": 15, "spell_basic_breathing": 1},
-		15: {"spirit_stone": 20, "health_pill": 3},
-		20: {"spirit_stone": 30, "foundation_pill": 1},
-		25: {"spirit_stone": 40, "health_pill": 5},
-		30: {"spirit_stone": 55, "spell_basic_steps": 1},
-		35: {"spirit_stone": 75},
-		40: {"spirit_stone": 100},
-		45: {"spirit_stone": 130},
-		50: {"spirit_stone": 170}
+		5: {"spirit_stone": 10, "health_pill": 3},
+		10: {"spirit_stone": 20, "spell_basic_breathing": 1},
+		15: {"spirit_stone": 30, "health_pill": 6},
+		20: {"spirit_stone": 60, "foundation_pill": 1},
+		25: {"spirit_stone": 90, "health_pill": 10},
+		30: {"spirit_stone": 150, "spell_basic_steps": 1},
+		35: {"spirit_stone": 250},
+		40: {"spirit_stone": 410},
+		45: {"spirit_stone": 600},
+		50: {"spirit_stone": 1060}
 	}
 }
 
