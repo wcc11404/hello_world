@@ -931,12 +931,13 @@ func _on_offline_reward_received(rewards: Dictionary):
 		# 始终显示小时和分钟，即使为0
 		var time_str = str(hours) + "小时" + str(minutes) + "分钟"
 		
-		add_log("===================================")
-		add_log("离线总计时间: " + time_str)
-		add_log("获得奖励：")
-		add_log("  - 灵气: " + str(int(spirit_energy)))
-		add_log("  - 灵石: " + str(spirit_stone))
-		add_log("===================================")
+		if log_manager:
+			log_manager.add_system_log("===================================")
+			log_manager.add_system_log("离线总计时间: " + time_str)
+			log_manager.add_system_log("获得奖励：")
+			log_manager.add_system_log("  - 灵气: " + str(int(spirit_energy)))
+			log_manager.add_system_log("  - 灵石: " + str(spirit_stone))
+			log_manager.add_system_log("===================================")
 
 func _on_account_logged_in(account_info: Dictionary):
 	update_account_ui()
