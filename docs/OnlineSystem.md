@@ -10,6 +10,37 @@
 - **弱网友好**：断网可继续游戏，联网后自动同步
 - **简化设计**：不引入不必要的复杂度（无Redis、无实时对战）
 
+### 项目结构
+
+采用**前后端分离**的架构，客户端和服务端分为两个独立项目：
+
+```
+hello_world/                    # 客户端（Godot）
+├── project.godot
+├── scripts/
+│   ├── network/               # 网络相关（新增）
+│   │   ├── NetworkManager.gd
+│   │   └── GameServerAPI.gd
+│   └── ...
+└── docs/OnlineSystem.md       # 本文件
+
+hello_world_server/             # 服务端（Node.js）
+├── package.json
+├── src/
+│   ├── app.js
+│   ├── routes/
+│   ├── controllers/
+│   └── middleware/
+├── sql/init.sql
+└── README.md
+```
+
+**分离理由：**
+- 技术栈分离，Godot 和 Node.js 互不干扰
+- AI 开发时代码上下文更清晰
+- 可以独立部署和扩展
+- 符合行业惯例
+
 ---
 
 ## 2. 技术栈
