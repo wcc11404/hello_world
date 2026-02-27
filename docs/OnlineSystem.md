@@ -24,22 +24,37 @@ hello_world/                    # 客户端（Godot）
 │   └── ...
 └── docs/OnlineSystem.md       # 本文件
 
-hello_world_server/             # 服务端（Node.js）
-├── package.json
-├── src/
-│   ├── app.js
-│   ├── routes/
-│   ├── controllers/
-│   └── middleware/
+hello_world_server/             # 服务端（Python + FastAPI）
+├── requirements.txt
+├── main.py
+├── app/
+│   ├── __init__.py
+│   ├── main.py
+│   ├── api/
+│   │   ├── __init__.py
+│   │   ├── auth.py
+│   │   └── game.py
+│   ├── core/
+│   │   ├── __init__.py
+│   │   ├── config.py
+│   │   └── security.py
+│   ├── db/
+│   │   ├── __init__.py
+│   │   ├── database.py
+│   │   └── models.py
+│   └── schemas/
+│       ├── __init__.py
+│       └── player.py
 ├── sql/init.sql
 └── README.md
 ```
 
 **分离理由：**
-- 技术栈分离，Godot 和 Node.js 互不干扰
+- 技术栈分离，Godot 和 Python 互不干扰
 - AI 开发时代码上下文更清晰
 - 可以独立部署和扩展
 - 符合行业惯例
+- Python 语法简洁，开发效率高
 
 ---
 
@@ -47,11 +62,19 @@ hello_world_server/             # 服务端（Node.js）
 
 | 组件 | 选择 | 理由 |
 |------|------|------|
-| 服务端 | Node.js + Express | 易维护、生态丰富、适合快速开发 |
+| 服务端 | Python + FastAPI | 语法简洁、开发效率高、异步性能优秀、AI生成代码质量好 |
 | 数据库 | PostgreSQL | 关系型数据、免费稳定、支持JSONB、Mac支持良好 |
+| ORM | Tortoise-ORM | 异步支持、类似Django ORM、类型友好 |
 | 缓存 | 无 | 不需要Redis，简化架构 |
 | 通信协议 | HTTP/REST | 简单可靠、弱网友好 |
 | 认证方式 | JWT Token | 无状态、支持Token续期 |
+
+### 性能说明
+
+对于挂机游戏场景，Python + FastAPI 完全满足需求：
+- 实际 QPS 需求：~33（1000在线用户，5分钟同步一次）
+- FastAPI 处理能力：~6000 QPS（数据库查询）
+- 性能差距（vs Node.js）：约25%，但对弱联网场景无感知
 
 ### Mac开发环境搭建
 
@@ -63,8 +86,16 @@ hello_world_server/             # 服务端（Node.js）
 brew install postgresql
 brew services start postgresql
 
-# 安装Node.js
-brew install node
+# 安装Python（3.9+）
+brew install python@3.11
+
+# 创建虚拟环境
+cd hello_world_server
+python3.11 -m venv venv
+source venv/bin/activate
+
+# 安装依赖
+pip install -r requirements.txt
 
 # 创建数据库
 createdb xiuxian_game
@@ -598,92 +629,124 @@ func on_auto_login():
 
 ---
 
-## 7. 服务端实现要点
+## 7. 服务端实现要点（Python + FastAPI）
 
 ### 7.1 项目结构
 
 ```
-server/
-├── package.json
-├── src/
-│   ├── app.js                  # Express入口
-│   ├── config/
-│   │   └── database.js         # 数据库配置
-│   ├── middleware/
-│   │   └── auth.js             # JWT验证中间件
-│   ├── routes/
-│   │   ├── auth.js             # 账号相关路由
-│   │   ├── game.js             # 游戏数据路由
-│   │   └── admin.js            # 管理后台路由
-│   ├── controllers/
-│   │   ├── authController.js
-│   │   ├── gameController.js
-│   │   └── adminController.js
-│   └── utils/
-│       └── jwt.js              # JWT工具
+hello_world_server/
+├── requirements.txt            # Python依赖
+├── main.py                     # 入口文件
+├── app/
+│   ├── __init__.py
+│   ├── main.py                 # FastAPI应用实例
+│   ├── api/
+│   │   ├── __init__.py
+│   │   ├── auth.py             # 账号相关路由
+│   │   ├── game.py             # 游戏数据路由
+│   │   └── admin.py            # 管理后台路由
+│   ├── core/
+│   │   ├── __init__.py
+│   │   ├── config.py           # 配置管理
+│   │   └── security.py         # JWT工具
+│   ├── db/
+│   │   ├── __init__.py
+│   │   ├── database.py         # 数据库连接
+│   │   └── models.py           # Tortoise ORM模型
+│   └── schemas/
+│       ├── __init__.py
+│       ├── auth.py             # 认证相关Pydantic模型
+│       └── player.py           # 玩家数据Pydantic模型
 └── sql/
     └── init.sql                # 数据库初始化脚本
 ```
 
-### 7.2 核心依赖
+### 7.2 核心依赖（requirements.txt）
 
-```json
-{
-    "dependencies": {
-        "express": "^4.18.0",
-        "pg": "^8.11.0",
-        "jsonwebtoken": "^9.0.0",
-        "bcrypt": "^5.1.0",
-        "dotenv": "^16.0.0"
-    }
-}
+```
+fastapi==0.104.0
+uvicorn[standard]==0.24.0
+tortoise-orm[asyncpg]==0.20.0
+pyjwt==2.8.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.6
+pydantic==2.5.0
+pydantic-settings==2.1.0
 ```
 
-### 7.3 JWT验证中间件
+### 7.3 JWT验证依赖
 
-```javascript
-// middleware/auth.js
-const jwt = require('jsonwebtoken');
-const db = require('../config/database');
+```python
+# app/core/security.py
+from datetime import datetime, timedelta
+from typing import Optional
+import jwt
+from passlib.context import CryptContext
 
-async function authMiddleware(req, res, next) {
-    const authHeader = req.headers.authorization;
-    
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ code: 'NO_TOKEN' });
-    }
-    
-    const token = authHeader.substring(7);
-    
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        
-        // 验证token_version
-        const account = await db.query(
-            'SELECT token_version FROM accounts WHERE id = $1',
-            [decoded.account_id]
-        );
-        
-        if (account.rows.length === 0) {
-            return res.status(401).json({ code: 'ACCOUNT_NOT_FOUND' });
-        }
-        
-        if (account.rows[0].token_version !== decoded.version) {
-            return res.status(401).json({ code: 'KICKED_OUT' });
-        }
-        
-        req.user = decoded;
-        next();
-        
-    } catch (err) {
-        if (err.name === 'TokenExpiredError') {
-            return res.status(401).json({ code: 'TOKEN_EXPIRED' });
-        }
-        return res.status(401).json({ code: 'INVALID_TOKEN' });
-    }
-}
+SECRET_KEY = "your-secret-key-here"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_DAYS = 7
 
-module.exports = authMiddleware;
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return pwd_context.verify(plain_password, hashed_password)
+
+def get_password_hash(password: str) -> str:
+    return pwd_context.hash(password)
+
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
+    to_encode = data.copy()
+    expire = datetime.utcnow() + (expires_delta or timedelta(days=ACCESS_TOKEN_EXPIRE_DAYS))
+    to_encode.update({"exp": expire})
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+def decode_token(token: str) -> Optional[dict]:
+    try:
+        return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    except jwt.PyJWTError:
+        return None
+```
+
+### 7.4 FastAPI JWT验证中间件
+
+```python
+# app/api/deps.py
+from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from app.core.security import decode_token
+from app.db.models import Account
+
+security = HTTPBearer()
+
+async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)) -> Account:
+    token = credentials.credentials
+    payload = decode_token(token)
+    
+    if not payload:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="INVALID_TOKEN"
+        )
+    
+    account_id = payload.get("account_id")
+    token_version = payload.get("version")
+    
+    account = await Account.get_or_none(id=account_id)
+    
+    if not account:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="ACCOUNT_NOT_FOUND"
+        )
+    
+    if account.token_version != token_version:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="KICKED_OUT"
+        )
+    
+    return account
 ```
 
 ---
@@ -1346,7 +1409,7 @@ func _on_login_pressed():
 
 - [PostgreSQL JSONB文档](https://www.postgresql.org/docs/current/datatype-json.html)
 - [JWT官方文档](https://jwt.io/introduction)
-- [Express官方文档](https://expressjs.com/)
+- [FastAPI官方文档](https://fastapi.tiangolo.com/)
 - [Godot HTTPRequest文档](https://docs.godotengine.org/en/stable/classes/class_httprequest.html)
 
 ---
