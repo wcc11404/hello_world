@@ -137,9 +137,16 @@ func _init_spell_ui():
 		scroll_container.offset_bottom = -10.0
 		scroll_container.grow_horizontal = 2  # GROW_DIRECTION_BOTH
 		scroll_container.grow_vertical = 2  # GROW_DIRECTION_BOTH
-		scroll_container.horizontal_scroll_mode = 2  # SCROLL_MODE_DISABLED
-		scroll_container.vertical_scroll_mode = 3  # SCROLL_MODE_AUTO
 		spell_panel.add_child(scroll_container)
+	
+	# 确保禁用横向滚动（无论是否新创建）
+	scroll_container.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll_container.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+	
+	# 隐藏横向滚动条（如果存在）
+	var h_scroll = scroll_container.get_node_or_null("_h_scroll")
+	if h_scroll:
+		h_scroll.visible = false
 	
 	# 获取或创建主容器
 	var main_container = scroll_container.get_node_or_null("SpellMainContainer")
@@ -194,11 +201,12 @@ func _create_spell_category(parent: Node, category_name: String, spell_type: int
 	category_label.name = "CategoryLabel_" + str(spell_type)
 	parent.add_child(category_label)
 	
-	# 术法卡片容器
-	var cards_container = HBoxContainer.new()
+	# 术法卡片容器 - 使用GridContainer自动换行
+	var cards_container = GridContainer.new()
 	cards_container.name = category_name + "Container"
-	cards_container.alignment = BoxContainer.ALIGNMENT_BEGIN
-	cards_container.add_theme_constant_override("separation", 10)
+	cards_container.columns = 4
+	cards_container.add_theme_constant_override("h_separation", 10)
+	cards_container.add_theme_constant_override("v_separation", 10)
 	parent.add_child(cards_container)
 	
 	# 获取该类型的术法
@@ -316,10 +324,12 @@ func _create_spell_card(parent: Node, spell_id: String):
 	spell_cards[spell_id] = card
 
 func _update_spell_card_content(card: Control, spell_info: Dictionary, spell_id: String):
-	"""更新术法卡片内容"""
 	var vbox = card.get_child(0) as VBoxContainer
 	if not vbox:
 		return
+	
+	var spell_type = spell_info.get("type", -1)
+	var is_misc = (spell_type == spell_data.SpellType.MISC) if spell_data else false
 	
 	# 更新名称
 	var name_label = vbox.get_node_or_null("NameLabel") as Label
@@ -343,27 +353,28 @@ func _update_spell_card_content(card: Control, spell_info: Dictionary, spell_id:
 		var equip_button = button_container.get_node_or_null("EquipButton") as Button
 		
 		if view_button:
-			# 断开旧信号
 			for conn in view_button.pressed.get_connections():
 				view_button.pressed.disconnect(conn.callable)
-			# 连接新信号
 			view_button.pressed.connect(_on_spell_view_button_pressed.bind(spell_id))
 		
 		if equip_button:
-			# 断开旧信号
-			for conn in equip_button.pressed.get_connections():
-				equip_button.pressed.disconnect(conn.callable)
-			
-			if spell_info.get("obtained", false):
-				if spell_info.get("equipped", false):
-					equip_button.text = "卸下"
+			if is_misc:
+				equip_button.visible = false
+			else:
+				equip_button.visible = true
+				for conn in equip_button.pressed.get_connections():
+					equip_button.pressed.disconnect(conn.callable)
+				
+				if spell_info.get("obtained", false):
+					if spell_info.get("equipped", false):
+						equip_button.text = "卸下"
+					else:
+						equip_button.text = "装备"
+					equip_button.disabled = false
+					equip_button.pressed.connect(_on_spell_equip_button_pressed.bind(spell_id))
 				else:
 					equip_button.text = "装备"
-				equip_button.disabled = false
-				equip_button.pressed.connect(_on_spell_equip_button_pressed.bind(spell_id))
-			else:
-				equip_button.text = "装备"
-				equip_button.disabled = true
+					equip_button.disabled = true
 
 func _create_spell_detail_popup():
 	"""创建术法详情弹窗"""

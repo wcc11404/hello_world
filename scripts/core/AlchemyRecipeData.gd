@@ -6,11 +6,12 @@ var recipes: Dictionary = {
 		"id": "health_pill",
 		"name": "补血丹",
 		"recipe_name": "补血丹丹方",
-		"success_value": 20,
+		"success_value": 50,
 		"base_time": 5.0,
 		"materials": {
 			"mat_herb": 2
 		},
+		"spirit_energy": 1,
 		"product": "health_pill",
 		"product_count": 1
 	},
@@ -18,11 +19,12 @@ var recipes: Dictionary = {
 		"id": "spirit_pill",
 		"name": "补气丹",
 		"recipe_name": "补气丹丹方",
-		"success_value": 20,
+		"success_value": 40,
 		"base_time": 5.0,
 		"materials": {
 			"mat_herb": 5
 		},
+		"spirit_energy": 1,
 		"product": "spirit_pill",
 		"product_count": 1
 	},
@@ -36,6 +38,7 @@ var recipes: Dictionary = {
 			"foundation_herb": 3,
 			"mat_herb": 10
 		},
+		"spirit_energy": 5,
 		"product": "foundation_pill",
 		"product_count": 1
 	},
@@ -43,13 +46,14 @@ var recipes: Dictionary = {
 		"id": "golden_core_pill",
 		"name": "金丹丹",
 		"recipe_name": "金丹丹丹方",
-		"success_value": 40,
+		"success_value": 20,
 		"base_time": 15.0,
 		"materials": {
 			"foundation_herb": 3,
 			"foundation_pill": 3,
 			"mat_herb": 10
 		},
+		"spirit_energy": 10,
 		"product": "golden_core_pill",
 		"product_count": 1
 	}
@@ -89,7 +93,7 @@ func get_recipe_base_time(recipe_id: String) -> float:
 # 获取丹方材料需求
 func get_recipe_materials(recipe_id: String) -> Dictionary:
 	var recipe = get_recipe_data(recipe_id)
-	return recipe.get("materials", {})
+	return recipe.get("materials", {}).duplicate(true)
 
 # 获取丹方成品ID
 func get_recipe_product(recipe_id: String) -> String:
@@ -100,3 +104,8 @@ func get_recipe_product(recipe_id: String) -> String:
 func get_recipe_product_count(recipe_id: String) -> int:
 	var recipe = get_recipe_data(recipe_id)
 	return recipe.get("product_count", 1)
+
+# 获取丹方灵气消耗
+func get_recipe_spirit_energy(recipe_id: String) -> int:
+	var recipe = get_recipe_data(recipe_id)
+	return recipe.get("spirit_energy", 0)

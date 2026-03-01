@@ -160,7 +160,10 @@ static func calculate_final_max_spirit_energy(player: Node) -> float:
 	
 	var base_max_spirit = player.base_max_spirit
 	
-	# TODO: 术法加成
+	# 术法加成（乘法）
+	var spell_bonuses = _get_spell_bonuses(player)
+	base_max_spirit *= spell_bonuses.get("max_spirit", 1.0)
+	
 	# TODO: 装备加成
 	# TODO: 功法加成
 	# TODO: 丹药加成
@@ -264,6 +267,7 @@ static func _get_spell_bonuses(player: Node) -> Dictionary:
 		"defense": 1.0,
 		"health": 1.0,
 		"spirit_gain": 1.0,
+		"max_spirit": 1.0,
 		"speed": 0.0
 	}
 	

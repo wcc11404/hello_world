@@ -35,7 +35,7 @@ const NORMAL_AREAS = {
 			},
 			{
 				"template": "snake",
-				"min_level": 4, "max_level": 8, "weight": 30,
+				"min_level": 4, "max_level": 8, "weight": 25,
 				"drops": {"spirit_stone": {"min": 1, "max": 2, "chance": 1.0}}
 			},
 			{
@@ -45,10 +45,10 @@ const NORMAL_AREAS = {
 			},
 			{
 				"template": "iron_back_wolf",
-				"min_level": 5, "max_level": 8, "weight": 5,
+				"min_level": 5, "max_level": 8, "weight": 10,
 				"drops": {
-					"spirit_stone": {"min": 5, "max": 8, "chance": 1.0},
-					"spell_basic_defense": {"min": 1, "max": 1, "chance": 0.2}
+					"spirit_stone": {"min": 3, "max": 5, "chance": 1.0},
+					"spell_basic_defense": {"min": 1, "max": 1, "chance": 0.3}
 				}
 			}
 		]
@@ -82,12 +82,12 @@ const NORMAL_AREAS = {
 		"enemies": [
 			{
 				"template": "wolf",
-				"min_level": 18, "max_level": 23, "weight": 30,
+				"min_level": 18, "max_level": 23, "weight": 35,
 				"drops": {"spirit_stone": {"min": 4, "max": 6, "chance": 1.0}}
 			},
 			{
 				"template": "snake",
-				"min_level": 18, "max_level": 23, "weight": 30,
+				"min_level": 18, "max_level": 23, "weight": 25,
 				"drops": {"spirit_stone": {"min": 4, "max": 6, "chance": 1.0}}
 			},
 			{
@@ -99,8 +99,8 @@ const NORMAL_AREAS = {
 				"template": "iron_back_wolf",
 				"min_level": 18, "max_level": 20, "weight": 10,
 				"drops": {
-					"spirit_stone": {"min": 10, "max": 15, "chance": 1.0},
-					"spell_basic_health": {"min": 1, "max": 1, "chance": 0.1}
+					"spirit_stone": {"min": 8, "max": 10, "chance": 1.0},
+					"spell_basic_health": {"min": 1, "max": 1, "chance": 0.2}
 				}
 			}
 		]

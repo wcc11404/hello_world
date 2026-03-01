@@ -64,6 +64,19 @@ const BREAKTHROUGH_MATERIALS = {
 	}
 }
 
+# 境界顺序（用于计算总境界等级）
+const REALM_ORDER = [
+	"炼气期",
+	"筑基期",
+	"金丹期",
+	"元婴期",
+	"化神期",
+	"炼虚期",
+	"合体期",
+	"大乘期",
+	"渡劫期"
+]
+
 const REALMS = {
 	"炼气期": {
 		"max_level": 10,
@@ -249,6 +262,23 @@ const REALMS = {
 
 func get_realm_info(realm_name: String) -> Dictionary:
 	return REALMS.get(realm_name, {})
+
+# 获取总境界等级（用于境界限制判断）
+# 返回值：炼气1层=1，炼气10层=10，筑基1层=11，筑基5层=15，以此类推
+func get_total_realm_level(realm_name: String, level: int) -> int:
+	var realm_index = REALM_ORDER.find(realm_name)
+	if realm_index < 0:
+		return 0
+	return realm_index * 10 + level
+
+# 检查是否满足境界要求
+# requirement 格式：{"realm_min": 15} 表示需要筑基5层
+func check_realm_requirement(realm_name: String, level: int, requirement: Dictionary) -> bool:
+	if requirement.is_empty():
+		return true
+	var realm_min = requirement.get("realm_min", 0)
+	var total_level = get_total_realm_level(realm_name, level)
+	return total_level >= realm_min
 
 func get_level_info(realm_name: String, level: int) -> Dictionary:
 	var realm_info = get_realm_info(realm_name)
