@@ -190,9 +190,9 @@ func _create_slot(index: int) -> Control:
 	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	count_label.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
 	count_label.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	count_label.offset_left = -40
+	count_label.offset_left = -55
 	count_label.offset_top = -20
-	count_label.offset_right = -5
+	count_label.offset_right = -2
 	count_label.offset_bottom = -2
 	count_label.add_theme_font_size_override("font_size", 14)
 	count_label.add_theme_color_override("font_color", Color(0.2, 0.2, 0.2, 1))
@@ -370,15 +370,21 @@ func _show_item_detail(index: int):
 	# 按钮可见性控制（根据新的物品类型系统）
 	# 查看按钮已移除，详情直接显示在面板中
 	
-	# 根据物品类型决定功能按钮显示
-	var item_type = item_data.get_item_type(item_id) if item_data else 1
-	var has_func = item_data.has_function(item_id) if item_data else false
+	# type=3 的一定有打开按钮
+	# type=2 和 type=4 且有 effect 字段的，才有使用按钮
+	var item_type = item_info.get("type", 0)
+	var has_effect = item_info.has("effect") and not item_info.get("effect", {}).is_empty()
 	
-	if has_func and use_button:
-		use_button.visible = true
-		use_button.text = item_data.get_function_button_text(item_id) if item_data else "使用"
-	else:
-		if use_button:
+	if use_button:
+		if item_type == 3:
+			# 礼包类，显示打开按钮
+			use_button.visible = true
+			use_button.text = "打开"
+		elif (item_type == 2 or item_type == 4) and has_effect:
+			# 装备类或功能解锁类，且有effect，显示使用按钮
+			use_button.visible = true
+			use_button.text = "使用"
+		else:
 			use_button.visible = false
 	
 	# 丢弃按钮始终显示
@@ -496,6 +502,51 @@ func _on_use_button_pressed():
 				else:
 					_add_log("术法系统未初始化，无法使用")
 					return
+			"unlock_feature":
+				var feature_id = effect.get("feature_id", "")
+				match feature_id:
+					"alchemy":
+						if player:
+							if player.has_alchemy_furnace:
+								_add_log("已拥有丹炉")
+								return
+							player.has_alchemy_furnace = true
+							_add_log("使用" + item_name + "，成功解锁炼丹功能")
+							# 通知GameUI刷新炼丹房UI
+							if game_ui and game_ui.has_method("refresh_alchemy_ui"):
+								game_ui.refresh_alchemy_ui()
+						else:
+							_add_log("玩家未初始化，无法使用")
+							return
+					_:
+						_add_log("未知功能：" + feature_id)
+						return
+			"learn_recipe":
+				var recipe_id = effect.get("recipe_id", "")
+				if not recipe_id:
+					# 尝试从物品ID推断丹方ID
+					if current_selected_item_id.begins_with("recipe_"):
+						recipe_id = current_selected_item_id.replace("recipe_", "")
+					else:
+						_add_log("无效的丹方ID")
+						return
+				
+				if not player:
+					_add_log("玩家未初始化，无法使用")
+					return
+				
+				# 检查是否已学会
+				if recipe_id in player.learned_recipes:
+					_add_log("已学会该丹方")
+					return
+				
+				# 添加到已学会列表
+				player.learned_recipes.append(recipe_id)
+				_add_log("使用" + item_name + "，成功学会丹方")
+				
+				# 通知GameUI刷新炼丹房UI
+				if game_ui and game_ui.has_method("refresh_alchemy_ui"):
+					game_ui.refresh_alchemy_ui()
 			_:
 				_add_log("未知效果类型：" + effect_type)
 				return
@@ -510,6 +561,17 @@ func _on_use_button_pressed():
 	
 	# 处理有内容的物品（如新手礼包）
 	if not content.is_empty():
+		# 检查境界限制
+		var requirement = item_info.get("requirement", {})
+		if not requirement.is_empty():
+			var game_manager = get_node_or_null("/root/GameManager")
+			if game_manager and player:
+				var realm_system = game_manager.get_realm_system()
+				if realm_system:
+					if not realm_system.check_realm_requirement(player.realm, player.realm_level, requirement):
+						_add_log("境界不足，无法打开")
+						return
+		
 		for content_id in content.keys():
 			var content_count = content[content_id]
 			if inventory:

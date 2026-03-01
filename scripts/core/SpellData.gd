@@ -23,19 +23,19 @@ const SPELLS = {
 		"max_level": 3,
 		"levels": {
 			1: {
-				"spirit_cost": 100,
-				"use_count_required": 100,
+				"spirit_cost": 1,
+				"use_count_required": 50,
 				"attribute_bonus": {"spirit_gain": 1.02},
 				"effect": {"type": "passive_heal", "heal_percent": 0.002}
 			},
 			2: {
-				"spirit_cost": 300,
+				"spirit_cost": 200,
 				"use_count_required": 200,
 				"attribute_bonus": {"spirit_gain": 1.04},
 				"effect": {"type": "passive_heal", "heal_percent": 0.004}
 			},
 			3: {
-				"spirit_cost": 900,
+				"spirit_cost": 500,
 				"use_count_required": 500,
 				"attribute_bonus": {"spirit_gain": 1.06},
 				"effect": {"type": "passive_heal", "heal_percent": 0.006}
@@ -52,19 +52,19 @@ const SPELLS = {
 		"max_level": 3,
 		"levels": {
 			1: {
-				"spirit_cost": 150,
-				"use_count_required": 100,
+				"spirit_cost": 50,
+				"use_count_required": 50,
 				"attribute_bonus": {"attack": 1.02},
 				"effect": {"type": "active_damage", "damage_percent": 1.10, "trigger_chance": 0.30}
 			},
 			2: {
-				"spirit_cost": 450,
+				"spirit_cost": 200,
 				"use_count_required": 200,
 				"attribute_bonus": {"attack": 1.04},
 				"effect": {"type": "active_damage", "damage_percent": 1.15, "trigger_chance": 0.30}
 			},
 			3: {
-				"spirit_cost": 1350,
+				"spirit_cost": 500,
 				"use_count_required": 500,
 				"attribute_bonus": {"attack": 1.06},
 				"effect": {"type": "active_damage", "damage_percent": 1.20, "trigger_chance": 0.30}
@@ -79,20 +79,20 @@ const SPELLS = {
 		"max_level": 3,
 		"levels": {
 			1: {
-				"spirit_cost": 180,
+				"spirit_cost": 100,
 				"use_count_required": 100,
 				"attribute_bonus": {"attack": 1.02},
 				"effect": {"type": "active_damage", "damage_percent": 1.30, "trigger_chance": 0.25}
 			},
 			2: {
-				"spirit_cost": 540,
-				"use_count_required": 200,
+				"spirit_cost": 300,
+				"use_count_required": 300,
 				"attribute_bonus": {"attack": 1.04},
 				"effect": {"type": "active_damage", "damage_percent": 1.35, "trigger_chance": 0.25}
 			},
 			3: {
-				"spirit_cost": 1620,
-				"use_count_required": 500,
+				"spirit_cost": 600,
+				"use_count_required": 600,
 				"attribute_bonus": {"attack": 1.06},
 				"effect": {"type": "active_damage", "damage_percent": 1.40, "trigger_chance": 0.25}
 			}
@@ -108,19 +108,19 @@ const SPELLS = {
 		"max_level": 3,
 		"levels": {
 			1: {
-				"spirit_cost": 120,
-				"use_count_required": 100,
+				"spirit_cost": 50,
+				"use_count_required": 50,
 				"attribute_bonus": {"defense": 1.02},
 				"effect": {"type": "start_buff", "buff_type": "defense", "buff_percent": 0.15, "trigger_chance": 1.0, "log_effect": "防御提升15%"}
 			},
 			2: {
-				"spirit_cost": 360,
+				"spirit_cost": 200,
 				"use_count_required": 200,
 				"attribute_bonus": {"defense": 1.04},
 				"effect": {"type": "start_buff", "buff_type": "defense", "buff_percent": 0.16, "trigger_chance": 1.0, "log_effect": "防御提升16%"}
 			},
 			3: {
-				"spirit_cost": 1080,
+				"spirit_cost": 500,
 				"use_count_required": 500,
 				"attribute_bonus": {"defense": 1.06},
 				"effect": {"type": "start_buff", "buff_type": "defense", "buff_percent": 0.17, "trigger_chance": 1.0, "log_effect": "防御提升17%"}
@@ -135,19 +135,19 @@ const SPELLS = {
 		"max_level": 3,
 		"levels": {
 			1: {
-				"spirit_cost": 130,
-				"use_count_required": 100,
+				"spirit_cost": 50,
+				"use_count_required": 50,
 				"attribute_bonus": {"speed": 0.1},
 				"effect": {"type": "start_buff", "buff_type": "speed", "buff_value": 0.1, "trigger_chance": 1.0, "log_effect": "速度+0.1"}
 			},
 			2: {
-				"spirit_cost": 390,
+				"spirit_cost": 200,
 				"use_count_required": 200,
 				"attribute_bonus": {"speed": 0.2},
 				"effect": {"type": "start_buff", "buff_type": "speed", "buff_value": 0.2, "trigger_chance": 1.0, "log_effect": "速度+0.2"}
 			},
 			3: {
-				"spirit_cost": 1170,
+				"spirit_cost": 500,
 				"use_count_required": 500,
 				"attribute_bonus": {"speed": 0.3},
 				"effect": {"type": "start_buff", "buff_type": "speed", "buff_value": 0.3, "trigger_chance": 1.0, "log_effect": "速度+0.3"}
@@ -162,8 +162,8 @@ const SPELLS = {
 		"max_level": 3,
 		"levels": {
 			1: {
-				"spirit_cost": 120,
-				"use_count_required": 100,
+				"spirit_cost": 50,
+				"use_count_required": 50,
 				"attribute_bonus": {"health": 1.02},
 				"effect": {"type": "start_buff", "buff_type": "health", "buff_percent": 0.005, "trigger_chance": 1.0, "log_effect": "气血上限提升0.5%"}
 			},
@@ -191,21 +191,21 @@ const SPELLS = {
 		"max_level": 3,
 		"levels": {
 			1: {
-				"spirit_cost": 100,
-				"use_count_required": 100,
-				"attribute_bonus": {},
+				"spirit_cost": 50,
+				"use_count_required": 50,
+				"attribute_bonus": {"max_spirit": 1.02},
 				"effect": {"type": "gathering", "efficiency": 1.1, "rare_chance": 0.05}
 			},
 			2: {
-				"spirit_cost": 300,
+				"spirit_cost": 200,
 				"use_count_required": 200,
-				"attribute_bonus": {},
+				"attribute_bonus": {"max_spirit": 1.04},
 				"effect": {"type": "gathering", "efficiency": 1.2, "rare_chance": 0.08}
 			},
 			3: {
-				"spirit_cost": 900,
+				"spirit_cost": 500,
 				"use_count_required": 500,
-				"attribute_bonus": {},
+				"attribute_bonus": {"max_spirit": 1.06},
 				"effect": {"type": "gathering", "efficiency": 1.3, "rare_chance": 0.12}
 			}
 		}
@@ -218,21 +218,21 @@ const SPELLS = {
 		"max_level": 3,
 		"levels": {
 			1: {
-				"spirit_cost": 100,
+				"spirit_cost": 50,
 				"use_count_required": 10,
-				"attribute_bonus": {},
+				"attribute_bonus": {"max_spirit": 1.02},
 				"effect": {"type": "alchemy", "success_bonus": 10, "speed_bonus": 0.1}
 			},
 			2: {
-				"spirit_cost": 300,
+				"spirit_cost": 200,
 				"use_count_required": 30,
-				"attribute_bonus": {},
+				"attribute_bonus": {"max_spirit": 1.04},
 				"effect": {"type": "alchemy", "success_bonus": 20, "speed_bonus": 0.2}
 			},
 			3: {
-				"spirit_cost": 600,
+				"spirit_cost": 500,
 				"use_count_required": 60,
-				"attribute_bonus": {},
+				"attribute_bonus": {"max_spirit": 1.06},
 				"effect": {"type": "alchemy", "success_bonus": 30, "speed_bonus": 0.3}
 			}
 		}
