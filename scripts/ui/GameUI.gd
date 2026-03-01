@@ -36,9 +36,11 @@ var neishi_module = null
 
 # 修炼突破模块（新增）
 var cultivation_module = null
+var cultivation_system = null
 
 # 历练模块（新增）
 var lianli_module = null
+var lianli_system = null
 
 # 境界背景素材配置
 const REALM_FRAME_TEXTURES = {
@@ -138,14 +140,17 @@ var view_button: Button = null
 @onready var success_rate_label: Label = get_node_or_null("VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel/CraftVBox/SuccessRateLabel")
 @onready var craft_time_label: Label = get_node_or_null("VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel/CraftVBox/CraftTimeLabel")
 @onready var materials_container: VBoxContainer = get_node_or_null("VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel/CraftVBox/MaterialsContainer")
-@onready var craft_button: Button = get_node_or_null("VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel/CraftVBox/CraftButton")
+@onready var craft_button: Button = get_node_or_null("VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel/CraftVBox/ButtonHBox/CraftButton")
+@onready var stop_button: Button = get_node_or_null("VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel/CraftVBox/ButtonHBox/StopButton")
+@onready var craft_progress_bar: ProgressBar = get_node_or_null("VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel/CraftVBox/CraftProgressBar")
+@onready var craft_count_label: Label = get_node_or_null("VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel/CraftVBox/CraftCountLabel")
 @onready var count_1_button: Button = get_node_or_null("VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel/CraftVBox/CountHBox/Count1Button")
 @onready var count_10_button: Button = get_node_or_null("VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel/CraftVBox/CountHBox/Count10Button")
 @onready var count_100_button: Button = get_node_or_null("VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel/CraftVBox/CountHBox/Count100Button")
 @onready var count_max_button: Button = get_node_or_null("VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel/CraftVBox/CountHBox/CountMaxButton")
-@onready var alchemy_info_label: Label = get_node_or_null("VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/BottomPanel/BottomHBox/AlchemyInfoLabel")
-@onready var furnace_info_label: Label = get_node_or_null("VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/BottomPanel/BottomHBox/FurnaceInfoLabel")
-@onready var alchemy_log_label: RichTextLabel = get_node_or_null("VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/LogPanel/LogLabel")
+@onready var alchemy_info_label: Label = get_node_or_null("VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/BottomPanel/BottomVBox/BottomHBox/AlchemyInfoLabel")
+@onready var furnace_info_label: Label = get_node_or_null("VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/BottomPanel/BottomVBox/BottomHBox/FurnaceInfoLabel")
+@onready var alchemy_back_button: Button = get_node_or_null("VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/TitleBar/BackButton")
 
 # 区域按钮列表
 var lianli_area_buttons: Array = []
@@ -179,7 +184,6 @@ const GRID_COLS = 5
 
 var item_data_ref: Node = null
 var spell_data_ref: Node = null
-var lianli_system: Node = null
 var lianli_area_data: Node = null
 var enemy_data: Node = null
 
@@ -326,9 +330,21 @@ func setup_alchemy_module():
 	alchemy_module.craft_time_label = craft_time_label
 	alchemy_module.materials_container = materials_container
 	alchemy_module.craft_button = craft_button
+	alchemy_module.stop_button = stop_button
+	alchemy_module.craft_progress_bar = craft_progress_bar
+	alchemy_module.craft_count_label = craft_count_label
 	alchemy_module.alchemy_info_label = alchemy_info_label
 	alchemy_module.furnace_info_label = furnace_info_label
-	alchemy_module.log_label = alchemy_log_label
+	alchemy_module.count_1_button = count_1_button
+	alchemy_module.count_10_button = count_10_button
+	alchemy_module.count_100_button = count_100_button
+	alchemy_module.count_max_button = count_max_button
+	
+	# 初始化炼丹模块（在设置UI节点引用之后）
+	alchemy_module.initialize(self, player, alchemy_system, recipe_data, item_data_ref)
+	
+	# 设置样式（必须在所有引用设置完成后）
+	alchemy_module.setup_styles()
 
 	# 连接数量选择按钮
 	if count_1_button:
@@ -342,6 +358,15 @@ func setup_alchemy_module():
 	
 	# 连接信号
 	alchemy_module.log_message.connect(_on_module_log)
+	alchemy_module.back_to_dongfu_requested.connect(_on_back_to_dongfu_requested)
+	
+	# 连接返回按钮
+	if alchemy_back_button:
+		alchemy_back_button.pressed.connect(_on_back_to_dongfu_requested)
+
+func _on_back_to_dongfu_requested():
+	"""处理返回洞府请求"""
+	show_dongfu_tab()
 
 func setup_settings_module():
 	# 创建设置模块
@@ -441,9 +466,9 @@ func setup_neishi_module():
 	
 	# 初始化模块
 	var game_manager = get_node("/root/GameManager")
-	var cult_system = game_manager.get_cultivation_system() if game_manager else null
-	var lianli_sys = game_manager.get_lianli_system() if game_manager else null
-	cultivation_module.initialize(self, player, cult_system, lianli_sys, item_data_ref)
+	cultivation_system = game_manager.get_cultivation_system() if game_manager else null
+	lianli_system = game_manager.get_lianli_system() if game_manager else null
+	cultivation_module.initialize(self, player, cultivation_system, lianli_system, item_data_ref)
 	
 	# 连接信号
 	cultivation_module.log_message.connect(_on_module_log)
@@ -632,6 +657,11 @@ func set_item_data(item_data_node: Node):
 	if cultivation_module:
 		cultivation_module.item_data = item_data_node
 
+func refresh_alchemy_ui():
+	"""刷新炼丹房UI，用于解锁丹炉或学会新丹方后更新显示"""
+	if alchemy_module:
+		alchemy_module.refresh_ui()
+
 func _on_spell_used(spell_id: String):
 	# 通知术法模块更新使用次数
 	if spell_module:
@@ -783,6 +813,31 @@ func _on_tab_lianli_pressed():
 
 func _on_tab_settings_pressed():
 	show_settings_tab()
+
+# 停止其他活动（炼丹、历练、修炼互斥）
+func stop_other_activities(current_activity: String):
+	match current_activity:
+		"alchemy":
+			# 停止修炼
+			if cultivation_system and cultivation_system.is_cultivating:
+				cultivation_system.stop_cultivation()
+			# 停止历练
+			if lianli_system and lianli_system.is_in_lianli:
+				lianli_system.exit_lianli()
+		"cultivation":
+			# 停止炼丹
+			if alchemy_module and alchemy_module.is_crafting_active():
+				alchemy_module.stop_crafting()
+			# 停止历练
+			if lianli_system and lianli_system.is_in_lianli:
+				lianli_system.exit_lianli()
+		"lianli":
+			# 停止炼丹
+			if alchemy_module and alchemy_module.is_crafting_active():
+				alchemy_module.stop_crafting()
+			# 停止修炼
+			if cultivation_system and cultivation_system.is_cultivating:
+				cultivation_system.stop_cultivation()
 
 # 初始化历练区域按钮
 func _init_lianli_area_buttons():

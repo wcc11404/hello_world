@@ -150,10 +150,10 @@ func check_materials(recipe_id: String, count: int) -> Dictionary:
 		return result
 	
 	var materials = recipe_data.get_recipe_materials(recipe_id)
-	result.materials = materials
 	
 	for material_id in materials.keys():
-		var required = materials[material_id] * count
+		var material_count = materials[material_id]
+		var required = material_count * count
 		var has = inventory.get_item_count(material_id)
 		result.materials[material_id] = {
 			"required": required,
@@ -289,10 +289,11 @@ func get_craft_preview(recipe_id: String, count: int) -> Dictionary:
 	preview.success_rate = calculate_success_rate(recipe_id)
 	preview.craft_time = calculate_craft_time(recipe_id)
 	preview.total_time = preview.craft_time * count
-	preview.materials = check_materials(recipe_id, count)
+	var materials_check = check_materials(recipe_id, count)
+	preview.materials = materials_check.materials
 	preview.alchemy_bonus = get_alchemy_bonus()
 	preview.furnace_bonus = get_furnace_bonus()
-	preview.can_craft = preview.materials.enough
+	preview.can_craft = materials_check.enough
 	
 	if not preview.can_craft:
 		preview.reason = "材料不足"

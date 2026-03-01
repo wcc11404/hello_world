@@ -24,7 +24,7 @@ var item_data: Dictionary = {
 		"name": "灵石",
 		"type": 0,
 		"quality": 0,
-		"max_stack": 9999999,
+		"max_stack": 999999999,
 		"description": "修仙界的通用货币",
 		"icon": "res://assets/items/spirit_stone.png"
 	},
@@ -42,8 +42,17 @@ var item_data: Dictionary = {
 		"name": "灵草",
 		"type": 1,
 		"quality": 0,
-		"max_stack": 99,
+		"max_stack": 9999,
 		"description": "用于炼丹的基础草药，具有广泛药用用途",
+		"icon": "res://assets/items/mat_herb.png"
+	},
+	"foundation_herb": {
+		"id": "foundation_herb",
+		"name": "破境草",
+		"type": 1,
+		"quality": 1,
+		"max_stack": 99,
+		"description": "制作破境丹药所必须的草药，蕴含突破境界的神秘力量",
 		"icon": "res://assets/items/mat_herb.png"
 	},
 	"mat_crystal": {
@@ -94,11 +103,11 @@ var item_data: Dictionary = {
 		"type": 3,
 		"quality": 1,
 		"max_stack": 99,
-		"description": "普通丹药，可回复100点气血值",
+		"description": "普通丹药，可回复50点气血值",
 		"icon": "res://assets/items/health_pill.png",
 		"effect": {
 			"type": "add_health",
-			"amount": 100
+			"amount": 50
 		}
 	},
 	"spirit_pill": {
@@ -190,6 +199,19 @@ var item_data: Dictionary = {
 		"effect": {
 			"type": "unlock_spell",
 			"spell_id": "basic_health"
+		}
+	},
+	"spell_alchemy": {
+		"id": "spell_alchemy",
+		"name": "炼丹术",
+		"type": 4,
+		"quality": 1,
+		"max_stack": 1,
+		"description": "使用后可解锁炼丹术法",
+		"icon": "res://assets/items/spell_shield_spell.png",
+		"effect": {
+			"type": "unlock_spell",
+			"spell_id": "alchemy"
 		}
 	},
 	"foundation_pill": {
@@ -322,7 +344,7 @@ var item_data: Dictionary = {
 		"type": 4,
 		"quality": 1,
 		"max_stack": 1,
-		"description": "炼丹的基础工具，使用后可解锁炼丹功能",
+		"description": "炼丹的基础工具，拥有丹炉后可进行炼丹",
 		"icon": "res://assets/items/mat_crystal.png",
 		"effect": {
 			"type": "unlock_feature",
@@ -331,16 +353,47 @@ var item_data: Dictionary = {
 	},
 	"starter_pack": {
 		"id": "starter_pack",
-		"name": "新手礼包",
+		"name": "新手礼包Ⅰ",
 		"type": 3,
 		"quality": 1,
 		"max_stack": 99,
-		"description": "打开后可获得25灵石、5个补血丹、基础拳法",
+		"description": "打开后可获得30灵石、2个补血丹、1个新手礼包Ⅱ",
 		"icon": "res://assets/items/starter_pack.png",
 		"content": {
-			"spirit_stone": 25,
-			"health_pill": 5,
-			"spell_basic_boxing_techniques": 1
+			"spirit_stone": 30,
+			"health_pill": 2,
+			"starter_pack_2": 1
+		}
+	},
+	"starter_pack_2": {
+		"id": "starter_pack_2",
+		"name": "新手礼包Ⅱ",
+		"type": 3,
+		"quality": 1,
+		"max_stack": 99,
+		"description": "需要炼气五层才能打开。打开后可获得基础拳法、1个新手礼包Ⅲ",
+		"icon": "res://assets/items/starter_pack.png",
+		"content": {
+			"spell_basic_boxing_techniques": 1,
+			"starter_pack_3": 1
+		},
+		"requirement": {
+			"realm_min": 5
+		}
+	},
+	"starter_pack_3": {
+		"id": "starter_pack_3",
+		"name": "新手礼包Ⅲ",
+		"type": 3,
+		"quality": 1,
+		"max_stack": 99,
+		"description": "需要炼气大圆满才能打开。打开后可获得筑基丹",
+		"icon": "res://assets/items/starter_pack.png",
+		"content": {
+			"foundation_pill": 1
+		},
+		"requirement": {
+			"realm_min": 10
 		}
 	},
 	"test_pack": {
@@ -349,7 +402,7 @@ var item_data: Dictionary = {
 		"type": 3,
 		"quality": 4,
 		"max_stack": 99,
-		"description": "打开后可获得1亿灵石、bug丹、补血丹、补气丹、所有术法解锁道具、所有突破丹药各10个",
+		"description": "打开后可获得1亿灵石、bug丹、补血丹、补气丹、所有术法解锁道具、所有突破丹药各10个、初级丹炉、所有丹方",
 		"icon": "res://assets/items/starter_pack.png",
 		"content": {
 			"spirit_stone": 100000000,
@@ -369,7 +422,15 @@ var item_data: Dictionary = {
 			"spell_thunder_strike": 1,
 			"spell_basic_defense": 1,
 			"spell_basic_steps": 1,
-			"spell_basic_health": 1
+			"spell_basic_health": 1,
+			"spell_alchemy": 1,
+			"alchemy_furnace": 1,
+			"recipe_health_pill": 1,
+			"recipe_spirit_pill": 1,
+			"recipe_foundation_pill": 1,
+			"recipe_golden_core_pill": 1,
+			"mat_herb": 9999,
+			"foundation_herb": 99
 		}
 	}
 }

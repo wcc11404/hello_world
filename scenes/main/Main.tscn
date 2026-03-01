@@ -128,6 +128,13 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_alchemy_panel"]
+bg_color = Color(0.85, 0.82, 0.78, 0.75)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
 [node name="Main" type="Control" unique_id=960069680]
 layout_mode = 3
 anchors_preset = 15
@@ -158,6 +165,11 @@ offset_right = -20.0
 offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="TopSpacer" type="Control" parent="VBoxContainer" unique_id=992490503]
+layout_mode = 2
+size_flags_vertical = 0
+custom_minimum_size = Vector2(0, 20)
 
 [node name="TopBar" type="Control" parent="VBoxContainer" unique_id=992490502]
 custom_minimum_size = Vector2(0, 80)
@@ -621,6 +633,8 @@ text = "整理"
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/ContentPanel/ChunaPanel" unique_id=230463376]
 layout_mode = 2
 size_flags_vertical = 3
+horizontal_scroll_mode = 2
+vertical_scroll_mode = 3
 
 [node name="InventoryGrid" type="GridContainer" parent="VBoxContainer/ContentPanel/ChunaPanel/ScrollContainer" unique_id=856887571]
 layout_mode = 2
@@ -1110,12 +1124,26 @@ offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TitleLabel" type="Label" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer" unique_id=1816358071]
+[node name="TitleBar" type="HBoxContainer" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer" unique_id=1816358071]
 layout_mode = 2
+alignment = 1
+
+[node name="BackButton" type="Button" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/TitleBar" unique_id=1816358102]
+custom_minimum_size = Vector2(60, 32)
+layout_mode = 2
+text = "< 返回"
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/TitleBar" unique_id=1816358103]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
 theme_override_font_sizes/font_size = 28
 text = "炼丹房"
 horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/TitleBar" unique_id=1816358104]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer" unique_id=1816358072]
 custom_minimum_size = Vector2(0, 10)
@@ -1126,10 +1154,10 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="RecipeListPanel" type="PanelContainer" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox" unique_id=1816358074]
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_alchemy_panel")
 
 [node name="RecipeListVBox" type="VBoxContainer" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/RecipeListPanel" unique_id=1816358075]
 layout_mode = 2
@@ -1141,7 +1169,7 @@ offset_bottom = -5.0
 [node name="RecipeListLabel" type="Label" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/RecipeListPanel/RecipeListVBox" unique_id=1816358076]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3, 0.3, 0.3, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 22
 text = "丹方列表"
 horizontal_alignment = 1
 
@@ -1158,6 +1186,7 @@ custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_alchemy_panel")
 
 [node name="CraftVBox" type="VBoxContainer" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel" unique_id=1816358080]
 layout_mode = 2
@@ -1200,6 +1229,7 @@ text = "材料需求"
 horizontal_alignment = 1
 
 [node name="MaterialsContainer" type="VBoxContainer" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel/CraftVBox" unique_id=1816358086]
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 
 [node name="HSeparator3" type="HSeparator" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel/CraftVBox" unique_id=1816358087]
@@ -1209,11 +1239,6 @@ layout_mode = 2
 [node name="CountHBox" type="HBoxContainer" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel/CraftVBox" unique_id=1816358088]
 layout_mode = 2
 alignment = 1
-
-[node name="CountLabel" type="Label" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel/CraftVBox/CountHBox" unique_id=1816358089]
-layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "数量:"
 
 [node name="Count1Button" type="Button" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel/CraftVBox/CountHBox" unique_id=1816358090]
 custom_minimum_size = Vector2(50, 35)
@@ -1239,12 +1264,31 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "Max"
 
-[node name="CraftButton" type="Button" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel/CraftVBox" unique_id=1816358094]
-custom_minimum_size = Vector2(150, 50)
+[node name="CraftCountLabel" type="Label" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel/CraftVBox" unique_id=1816358102]
 layout_mode = 2
-size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_constants/top_margin = 16
+theme_override_font_sizes/font_size = 24
+text = "0/0"
+horizontal_alignment = 1
+
+[node name="CraftProgressBar" type="ProgressBar" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel/CraftVBox" unique_id=1816358095]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 100.0
+value = 0.0
+show_percentage = false
+
+[node name="ButtonHBox" type="HBoxContainer" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel/CraftVBox" unique_id=1816358103]
+layout_mode = 2
+alignment = 1
+
+[node name="CraftButton" type="Button" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel/CraftVBox/ButtonHBox" unique_id=1816358094]
+custom_minimum_size = Vector2(120, 45)
+layout_mode = 2
 theme_override_colors/font_color = Color(0.35, 0.32, 0.28, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
@@ -1252,44 +1296,57 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_button_disabled")
 disabled = true
 text = "开始炼制"
 
-[node name="BottomPanel" type="PanelContainer" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer" unique_id=1816358096]
-custom_minimum_size = Vector2(0, 80)
+[node name="StopButton" type="Button" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/MainHBox/CraftPanel/CraftVBox/ButtonHBox" unique_id=1816358104]
+custom_minimum_size = Vector2(120, 45)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.32, 0.28, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_button_disabled")
+disabled = true
+text = "停止"
 
-[node name="BottomHBox" type="HBoxContainer" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/BottomPanel" unique_id=1816358097]
+[node name="BottomPanel" type="PanelContainer" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer" unique_id=1816358096]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_alchemy_panel")
+
+[node name="BottomVBox" type="VBoxContainer" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/BottomPanel" unique_id=1816358097]
 layout_mode = 2
 offset_left = 10.0
-offset_top = 10.0
+offset_top = 5.0
 offset_right = -10.0
-offset_bottom = -10.0
+offset_bottom = -5.0
 
-[node name="AlchemyInfoLabel" type="Label" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/BottomPanel/BottomHBox" unique_id=1816358098]
+[node name="BonusTitleLabel" type="Label" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/BottomPanel/BottomVBox" unique_id=1816358098]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 18
+text = "炼丹加成"
+horizontal_alignment = 1
+
+[node name="BottomHBox" type="HBoxContainer" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/BottomPanel/BottomVBox" unique_id=1816358099]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="AlchemyInfoLabel" type="Label" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/BottomPanel/BottomVBox/BottomHBox" unique_id=1816358100]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.3, 0.3, 0.3, 1)
 theme_override_font_sizes/font_size = 16
 text = "炼丹术: 未学习"
+horizontal_alignment = 1
 
-[node name="FurnaceInfoLabel" type="Label" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/BottomPanel/BottomHBox" unique_id=1816358099]
+[node name="FurnaceInfoLabel" type="Label" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/BottomPanel/BottomVBox/BottomHBox" unique_id=1816358101]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.3, 0.3, 0.3, 1)
 theme_override_font_sizes/font_size = 16
 text = "丹炉: 无"
-
-[node name="LogPanel" type="PanelContainer" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer" unique_id=1816358100]
-custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
-
-[node name="LogLabel" type="RichTextLabel" parent="VBoxContainer/ContentPanel/AlchemyRoomPanel/VBoxContainer/LogPanel" unique_id=1816358101]
-layout_mode = 2
-offset_left = 5.0
-offset_top = 5.0
-offset_right = -5.0
-offset_bottom = -5.0
-theme_override_colors/default_color = Color(0.3, 0.3, 0.3, 1)
-theme_override_font_sizes/normal_font_size = 14
-scroll_following = true
+horizontal_alignment = 1
 
 [node name="LogArea" type="PanelContainer" parent="VBoxContainer" unique_id=342638057]
 custom_minimum_size = Vector2(0, 180)
@@ -1308,6 +1365,11 @@ scroll_following = true
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 alignment = 1
+
+[node name="BottomSpacer" type="Control" parent="VBoxContainer" unique_id=1586396814]
+layout_mode = 2
+size_flags_vertical = 0
+custom_minimum_size = Vector2(0, 20)
 
 [node name="NeishiButton" type="Button" parent="VBoxContainer/TabBar" unique_id=857891154]
 custom_minimum_size = Vector2(120, 50)

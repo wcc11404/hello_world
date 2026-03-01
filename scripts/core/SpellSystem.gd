@@ -267,7 +267,8 @@ func get_attribute_bonuses() -> Dictionary:
 		"defense": 1.0,
 		"health": 1.0,
 		"spirit_gain": 1.0,
-		"speed": 0.0  # 步法是加法
+		"max_spirit": 1.0,
+		"speed": 0.0
 	}
 	
 	if not spell_data:
